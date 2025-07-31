@@ -28,7 +28,7 @@
       background: none;
       border: none;
       color: white;
-      font-size: 1.0em;
+      font-size: 1.0em; /* Menor que os botões principais */
       cursor: pointer;
       position: relative;
     }
@@ -271,7 +271,7 @@
 
   <script>
     // --- CONFIGURAÇÃO INICIAL ---
-    // Função para obter parâmetros da URL
+    // Função para obter parâmetros da URL (webAppUrl)
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
@@ -279,6 +279,7 @@
 
     // Obter a URL do Web App da URL
     const WEB_APP_URL = getQueryParam('webAppUrl');
+    console.log("WEB_APP_URL obtida da URL:", WEB_APP_URL); // Log para debugging
 
     // --- VARIÁVEIS GLOBAIS ---
     let allNotes = []; // Armazena todas as anotações carregadas
@@ -299,6 +300,7 @@
     }
 
     function displayErrorMessage(message) {
+      console.error("Erro de exibição:", message); // Log para debugging
       document.getElementById('error-message').textContent = message;
       document.getElementById('error-message').style.display = 'block';
       showSection(); // Esconde outras seções
@@ -420,15 +422,19 @@
 
     // --- FUNÇÕES DE COMUNICAÇÃO COM O BACKEND ---
     async function loadNotes() {
+        // Verificação corrigida: Checa se WEB_APP_URL é válida (não nula/não vazia)
         if (!WEB_APP_URL) {
-             displayErrorMessage("Erro: 'webAppUrl' não foi fornecido nos parâmetros da URL. Ex: ?webAppUrl=URL_DO_WEB_APP.");
+             const errorMsg = "Erro: 'webAppUrl' não foi fornecido nos parâmetros da URL. Ex: ?webAppUrl=URL_DO_WEB_APP.";
+             console.error(errorMsg); // Log para debugging
+             displayErrorMessage(errorMsg);
              return;
         }
         try {
             showSection('loading-message');
-            // Usar o Web App para leitura
+            console.log("Carregando notas de:", `${WEB_APP_URL}?action=read`); // Log para debugging
             const response = await fetch(`${WEB_APP_URL}?action=read`, {
                 method: 'GET',
+                // mode: 'cors' // Geralmente não é necessário se o Web App estiver configurado corretamente
             });
 
             if (!response.ok) {
@@ -437,14 +443,16 @@
             }
 
             const jsonData = await response.json();
+            console.log("Dados recebidos:", jsonData); // Log para debugging
 
             if (jsonData.error) {
                  displayErrorMessage(`Erro do servidor: ${jsonData.error}`);
                  return;
             }
 
-            if (!Array.isArray(jsonData) || jsonData.length === 0) {
-                 displayErrorMessage("Nenhuma anotação encontrada na planilha.");
+            if (!Array.isArray(jsonData)) { // Verifica se é um array
+                 displayErrorMessage("Formato de dados inesperado recebido do servidor.");
+                 console.warn("Dados recebidos (não é array):", jsonData);
                  return;
             }
 
@@ -476,11 +484,18 @@
         }
     }
 
-    async function saveNote() {
+    async function saveNote(event) {
+        // Previne o reload padrão do formulário
+        if (event) event.preventDefault();
+
+        // Verificação corrigida: Checa se WEB_APP_URL é válida
         if (!WEB_APP_URL) {
-             alert("Erro: 'webAppUrl' não foi fornecido. Não é possível salvar.");
+             const errorMsg = "Erro: 'webAppUrl' não foi fornecido. Não é possível salvar.";
+             console.error(errorMsg); // Log para debugging
+             alert(errorMsg); // Alerta para o usuário
              return;
         }
+
         const form = document.getElementById('note-form');
         const id = document.getElementById('form-note-id').value;
         const title = document.getElementById('form-note-title').value.trim();
@@ -498,15 +513,17 @@
             title: title,
             content: content,
             category: category
+            // Data de criação/modificação pode ser gerida pelo Apps Script
         };
 
         try {
+            console.log("Salvando anotação:", noteData); // Log para debugging
             const formData = new FormData();
             Object.keys(noteData).forEach(key => formData.append(key, noteData[key]));
 
             const response = await fetch(WEB_APP_URL, {
                 method: 'POST',
-                body: formData
+                body: formData // Envia como FormData
             });
 
             if (!response.ok) {
@@ -518,7 +535,7 @@
             if (result.error) {
                 throw new Error(result.error);
             }
-            console.log("Sucesso:", result);
+            console.log("Sucesso ao salvar:", result);
             // Recarrega os dados após salvar
             await loadNotes();
             // Volta para a visualização de detalhes
@@ -527,10 +544,12 @@
                 showNoteDetails(noteData.id);
             } else {
                 // Se era criação, tenta encontrar o novo ID
+                // O Apps Script retorna o newId
                 const newNoteId = result.newId;
                 if (newNoteId) {
                     showNoteDetails(newNoteId);
                 } else {
+                    // Fallback: mostra a primeira nota filtrada
                     if (filteredNotes.length > 0) {
                         showNoteDetails(filteredNotes[0].id);
                     } else {
@@ -548,21 +567,26 @@
     }
 
     async function deleteNote(noteId) {
+        // Verificação corrigida: Checa se WEB_APP_URL é válida
         if (!WEB_APP_URL) {
-             alert("Erro: 'webAppUrl' não foi fornecido. Não é possível excluir.");
+             const errorMsg = "Erro: 'webAppUrl' não foi fornecido. Não é possível excluir.";
+             console.error(errorMsg); // Log para debugging
+             alert(errorMsg); // Alerta para o usuário
              return;
         }
+
         if (!confirm("Tem certeza que deseja excluir esta anotação?")) {
             return;
         }
 
         try {
+            console.log("Excluindo anotação com ID:", noteId); // Log para debugging
             const formData = new FormData();
             formData.append('action', 'delete');
             formData.append('id', noteId);
 
             const response = await fetch(WEB_APP_URL, {
-                method: 'POST',
+                method: 'POST', // Apps Script doPost lida com tudo
                 body: formData
             });
 
@@ -575,7 +599,7 @@
             if (result.error) {
                  throw new Error(result.error);
             }
-            console.log("Excluído com sucesso:", result);
+            console.log("Sucesso ao excluir:", result);
             // Recarrega os dados após excluir
             await loadNotes();
             // Seleciona outra anotação ou limpa os detalhes
@@ -595,10 +619,8 @@
     }
 
     // --- INICIALIZAÇÃO ---
-    document.getElementById('note-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveNote();
-    });
+    // Adiciona o listener ao formulário
+    document.getElementById('note-form').addEventListener('submit', saveNote);
 
     // Inicia o carregamento das anotações quando a página é carregada
     window.addEventListener('load', loadNotes);
