@@ -73,7 +73,7 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
       display: flex;
-      overflow: hidden; /* Esconde scrollbars internos */
+      overflow: hidden;
     }
     #notes-list-container {
       width: 30%;
@@ -116,7 +116,7 @@
     }
     #note-detail-content {
       flex-grow: 1;
-      white-space: pre-wrap; /* Preserva quebras de linha */
+      white-space: pre-wrap;
       text-align: left;
       margin-bottom: 20px;
     }
@@ -131,7 +131,7 @@
       margin-bottom: 15px;
     }
     #note-form-container {
-      display: none; /* Inicialmente escondido */
+      display: none;
       width: 100%;
       padding: 20px;
       overflow-y: auto;
@@ -149,11 +149,11 @@
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-family: Arial, sans-serif; /* Para consistência */
+      font-family: Arial, sans-serif;
     }
     #note-form textarea {
-      height: 200px; /* Altura fixa para o conteúdo */
-      resize: vertical; /* Permite redimensionar verticalmente */
+      height: 200px;
+      resize: vertical;
     }
     #note-form button {
       background-color: gold;
@@ -184,7 +184,6 @@
       color: white;
       position: relative;
     }
-    /* Tooltip para botões da base - aparece e some com JS */
     .bottom-bar button::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -225,7 +224,6 @@
     <input type="text" id="searchInput" placeholder="Buscar..." oninput="filterNotes()" />
     <select id="categoryFilter" onchange="filterNotes()">
       <option value="">Todas as Categorias</option>
-      <!-- As opções de categoria serão preenchidas dinamicamente -->
     </select>
     <span id="noteCounter">0 anotações</span>
   </div>
@@ -271,19 +269,17 @@
 
   <script>
     // --- CONFIGURAÇÃO INICIAL ---
-    // Função para obter parâmetros da URL
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
 
-    // Obter a URL do Web App da URL
     const WEB_APP_URL = getQueryParam('webAppUrl');
 
     // --- VARIÁVEIS GLOBAIS ---
-    let allNotes = []; // Armazena todas as anotações carregadas
-    let filteredNotes = []; // Armazena anotações filtradas
-    let currentNoteId = null; // ID da anotação atualmente selecionada
+    let allNotes = [];
+    let filteredNotes = [];
+    let currentNoteId = null;
 
     // --- FUNÇÕES DE INTERFACE ---
     function showSection(sectionId) {
@@ -301,7 +297,7 @@
     function displayErrorMessage(message) {
       document.getElementById('error-message').textContent = message;
       document.getElementById('error-message').style.display = 'block';
-      showSection(); // Esconde outras seções
+      showSection();
     }
 
     function updateNoteCounter() {
@@ -312,7 +308,7 @@
     function populateCategoryFilter() {
       const categories = [...new Set(allNotes.map(note => note.category).filter(cat => cat))];
       const filterSelect = document.getElementById('categoryFilter');
-      filterSelect.innerHTML = '<option value="">Todas as Categorias</option>'; // Limpa e adiciona opção padrão
+      filterSelect.innerHTML = '<option value="">Todas as Categorias</option>';
       categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
@@ -324,7 +320,7 @@
     // --- FUNÇÕES DE EXIBIÇÃO DE DADOS ---
     function displayNotesList() {
        const listElement = document.getElementById('notes-list');
-       listElement.innerHTML = ''; // Limpa a lista
+       listElement.innerHTML = '';
 
        filteredNotes.forEach(note => {
          const listItem = document.createElement('li');
@@ -355,10 +351,8 @@
 
         document.getElementById('note-detail-title').textContent = note.title;
         document.getElementById('note-detail-category').textContent = note.category ? `Categoria: ${note.category}` : '';
-        // Substitui o marcador '↳' por quebras de linha reais para exibição
         document.getElementById('note-detail-content').textContent = note.content.replace(/↳/g, '\n');
 
-        // Atualiza a classe 'active' na lista
         document.querySelectorAll('.note-item').forEach(item => {
             item.classList.remove('active');
             if (item.dataset.id == note.id) {
@@ -387,7 +381,6 @@
         document.getElementById('form-note-id').value = note.id;
         document.getElementById('form-note-title').value = note.title;
         document.getElementById('form-note-category').value = note.category || '';
-        // Mostra o conteúdo com o marcador '↳' para edição
         document.getElementById('form-note-content').value = note.content;
         showSection('note-form-container');
     }
@@ -398,7 +391,7 @@
         } else if (filteredNotes.length > 0) {
             showNoteDetails(filteredNotes[0].id);
         } else {
-            displayNotesList(); // Se não houver notas, mostra a lista vazia
+            displayNotesList();
         }
     }
 
@@ -426,7 +419,6 @@
         }
         try {
             showSection('loading-message');
-            // Usar o Web App para leitura
             const response = await fetch(`${WEB_APP_URL}?action=read`, {
                 method: 'GET',
             });
@@ -448,7 +440,6 @@
                  return;
             }
 
-            // Mapeia os dados do JSON para o formato esperado pelo frontend
             allNotes = jsonData.map(item => ({
                 id: item['ID'] || item['id'] || '',
                 title: item['Título'] || item['Titulo'] || item['title'] || 'Sem título',
@@ -460,11 +451,11 @@
 
             filteredNotes = [...allNotes];
             populateCategoryFilter();
-            filterNotes(); // Aplica filtros iniciais (que estarão vazios)
+            filterNotes();
             if (filteredNotes.length > 0) {
                 showNoteDetails(filteredNotes[0].id);
             } else {
-                 showSection(); // Mostra área principal vazia
+                 showSection();
                  document.getElementById('loading-message').textContent = "Nenhuma anotação disponível.";
                  document.getElementById('loading-message').style.display = 'block';
             }
@@ -481,7 +472,6 @@
              alert("Erro: 'webAppUrl' não foi fornecido. Não é possível salvar.");
              return;
         }
-        const form = document.getElementById('note-form');
         const id = document.getElementById('form-note-id').value;
         const title = document.getElementById('form-note-title').value.trim();
         const category = document.getElementById('form-note-category').value.trim();
@@ -492,18 +482,14 @@
             return;
         }
 
-        const noteData = {
-            action: id ? 'update' : 'create',
-            id: id,
-            title: title,
-            content: content,
-            category: category
-        };
+        const formData = new FormData();
+        formData.append('action', id ? 'update' : 'create');
+        if (id) formData.append('id', id);
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('category', category);
 
         try {
-            const formData = new FormData();
-            Object.keys(noteData).forEach(key => formData.append(key, noteData[key]));
-
             const response = await fetch(WEB_APP_URL, {
                 method: 'POST',
                 body: formData
@@ -511,110 +497,29 @@
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Erro do servidor: ${response.status} - ${errorText}`);
+                throw new Error(`Erro na requisição: ${response.status} - ${errorText}`);
             }
 
             const result = await response.json();
+
             if (result.error) {
-                throw new Error(result.error);
+                alert(`Erro: ${result.error}`);
+                return;
             }
-            console.log("Sucesso:", result);
-            // Recarrega os dados após salvar
-            await loadNotes();
-            // Volta para a visualização de detalhes
-            if (noteData.id) {
-                // Se era edição
-                showNoteDetails(noteData.id);
-            } else {
-                // Se era criação, tenta encontrar o novo ID
-                const newNoteId = result.newId;
-                if (newNoteId) {
-                    showNoteDetails(newNoteId);
-                } else {
-                    if (filteredNotes.length > 0) {
-                        showNoteDetails(filteredNotes[0].id);
-                    } else {
-                        showSection(); // Mostra área principal vazia
-                         document.getElementById('loading-message').textContent = "Nenhuma anotação disponível.";
-                         document.getElementById('loading-message').style.display = 'block';
-                    }
-                }
+
+            if (result.success) {
+                alert(result.message || 'Operação realizada com sucesso!');
+                await loadNotes(); // Recarrega as anotações
             }
 
         } catch (error) {
             console.error("Erro ao salvar anotação:", error);
-            alert(`Erro ao salvar: ${error.message}`);
+            alert(`Falha ao salvar anotação: ${error.message}`);
         }
     }
 
     async function deleteNote(noteId) {
         if (!WEB_APP_URL) {
              alert("Erro: 'webAppUrl' não foi fornecido. Não é possível excluir.");
-             return;
-        }
-        if (!confirm("Tem certeza que deseja excluir esta anotação?")) {
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('action', 'delete');
-            formData.append('id', noteId);
-
-            const response = await fetch(WEB_APP_URL, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Erro do servidor: ${response.status} - ${errorText}`);
-            }
-
-            const result = await response.json();
-            if (result.error) {
-                 throw new Error(result.error);
-            }
-            console.log("Excluído com sucesso:", result);
-            // Recarrega os dados após excluir
-            await loadNotes();
-            // Seleciona outra anotação ou limpa os detalhes
-            if (filteredNotes.length > 0) {
-                showNoteDetails(filteredNotes[0].id);
-            } else {
-                currentNoteId = null;
-                showSection(); // Mostra área principal vazia
-                 document.getElementById('loading-message').textContent = "Nenhuma anotação disponível.";
-                 document.getElementById('loading-message').style.display = 'block';
-            }
-
-        } catch (error) {
-            console.error("Erro ao excluir anotação:", error);
-            alert(`Erro ao excluir: ${error.message}`);
-        }
-    }
-
-    // --- INICIALIZAÇÃO ---
-    document.getElementById('note-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveNote();
-    });
-
-    // Inicia o carregamento das anotações quando a página é carregada
-    window.addEventListener('load', loadNotes);
-
-    // Tooltip simples para os botões da barra inferior (se houver)
-    function showTooltipOnHover(el) {
-      clearTimeout(el.tooltipTimer);
-      el.classList.add("show-tooltip");
-      el.tooltipTimer = setTimeout(() => {
-        el.classList.remove("show-tooltip");
-      }, 1000);
-    }
-    function hideTooltipOnLeave(el) {
-      clearTimeout(el.tooltipTimer);
-      el.classList.remove("show-tooltip");
-    }
-  </script>
-</body>
-</html>
+   
+(Content truncated due to size limit. Use page ranges or line ranges to read remaining content)
