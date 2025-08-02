@@ -275,6 +275,7 @@
     }
 
     const WEB_APP_URL = getQueryParam("webAppUrl");
+    console.log("WEB_APP_URL:", WEB_APP_URL);
 
     // --- VARIÁVEIS GLOBAIS ---
     let allNotes = [];
@@ -296,12 +297,7 @@
       if (sectionId) {
         const element = document.getElementById(sectionId);
         if (element) {
-          // Usar flex para os containers principais que precisam de layout flex
-          if (sectionId === "notes-list-container" || sectionId === "note-detail-container" || sectionId === "note-form-container") {
-            element.style.display = "flex";
-          } else {
-            element.style.display = "block";
-          }
+          element.style.display = "block";
           console.log("Seção exibida:", sectionId);
         } else {
           console.error("Elemento não encontrado:", sectionId);
@@ -310,6 +306,7 @@
     }
 
     function displayErrorMessage(message) {
+      console.error("Erro:", message);
       document.getElementById("error-message").textContent = message;
       document.getElementById("error-message").style.display = "block";
       showSection();
@@ -457,16 +454,35 @@
         try {
             showSection("loading-message");
             console.log("Fazendo fetch para:", `${WEB_APP_URL}?action=read`);
+            
             const response = await fetch(`${WEB_APP_URL}?action=read`, {
                 method: "GET",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
             });
+
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers);
 
             if (!response.ok) {
                 const errorText = await response.text();
+                console.error("Erro na resposta:", errorText);
                 throw new Error(`Erro ao carregar dados: ${response.status} - ${errorText}`);
             }
 
-            const jsonData = await response.json();
+            const responseText = await response.text();
+            console.log("Response text:", responseText);
+
+            let jsonData;
+            try {
+                jsonData = JSON.parse(responseText);
+            } catch (parseError) {
+                console.error("Erro ao fazer parse do JSON:", parseError);
+                throw new Error(`Resposta não é um JSON válido: ${responseText}`);
+            }
+
             console.log("Dados recebidos do backend:", jsonData);
 
             if (jsonData.error) {
@@ -519,5 +535,132 @@
         const id = document.getElementById("form-note-id").value;
         const title = document.getElementById("form-note-title").value.trim();
         const category = document.getElementById("form-note-category").value.trim();
-        const content
-(Content truncated due to size limit. Use page ranges or line ranges to read remaining content)
+        const content = document.getElementById("form-note-content").value;
+
+        if (!title) {
+            alert("O título é obrigatório.");
+            document.getElementById("form-note-title").focus();
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("action", id ? "update" : "create");
+        if (id) formData.append("id", id);
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("category", category);
+
+        try {
+            const response = await fetch(WEB_APP_URL, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erro na requisição: ${response.status} - ${errorText}`);
+            }
+
+            const result = await response.json();
+
+            if (result.error) {
+                alert(`Erro: ${result.error}`);
+                return;
+            }
+
+            if (result.success) {
+                alert(result.message || "Operação realizada com sucesso!");
+                await loadNotes(); // Recarrega as anotações
+            }
+
+        } catch (error) {
+            console.error("Erro ao salvar anotação:", error);
+            alert(`Falha ao salvar anotação: ${error.message}`);
+        }
+    }
+
+    async function deleteNote(noteId) {
+        console.log("Excluindo anotação:", noteId);
+        
+        if (!WEB_APP_URL) {
+             alert("Erro: 'webAppUrl' não foi fornecido. Não é possível excluir.");
+             return;
+        }
+        if (!noteId) {
+            alert("Erro: ID da anotação não encontrado.");
+            return;
+        }
+
+        if (!confirm("Tem certeza que deseja excluir esta anotação?")) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("action", "delete");
+        formData.append("id", noteId);
+
+        try {
+            const response = await fetch(WEB_APP_URL, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erro na requisição: ${response.status} - ${errorText}`);
+            }
+
+            const result = await response.json();
+
+            if (result.error) {
+                alert(`Erro: ${result.error}`);
+                return;
+            }
+
+            if (result.success) {
+                alert(result.message || "Anotação excluída com sucesso!");
+                await loadNotes(); // Recarrega as anotações
+            }
+
+        } catch (error) {
+            console.error("Erro ao excluir anotação:", error);
+            alert(`Falha ao excluir anotação: ${error.message}`);
+        }
+    }
+
+    // --- EVENT LISTENERS E INICIALIZAÇÃO ---
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM carregado, inicializando aplicação...");
+        console.log("WEB_APP_URL configurado:", WEB_APP_URL);
+        
+        // Event listener para o formulário
+        const form = document.getElementById("note-form");
+        if (form) {
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                console.log("Formulário submetido");
+                saveNote();
+            });
+        }
+
+        // Carrega as anotações ao inicializar
+        loadNotes();
+        
+        console.log("Aplicação inicializada");
+    });
+
+    // Função de teste para debug
+    function testOpenForm() {
+        console.log("Teste: abrindo formulário");
+        openAddNoteForm();
+    }
+
+    // Função de teste para verificar se o botão funciona
+    window.testButton = function() {
+        console.log("Botão testado!");
+        openAddNoteForm();
+    };
+  </script>
+</body>
+</html>
+
