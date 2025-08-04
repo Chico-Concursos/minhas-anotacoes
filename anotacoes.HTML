@@ -227,16 +227,13 @@
     </select>
     <span id="noteCounter">0 anotações</span>
   </div>
-
   <div id="main-container">
     <div id="loading-message">Carregando anotações...</div>
     <div id="error-message" style="display:none;"></div>
-
     <!-- Área de Listagem -->
     <div id="notes-list-container" style="display:none;">
       <ul id="notes-list"></ul>
     </div>
-
     <!-- Área de Detalhes -->
     <div id="note-detail-container" style="display:none;">
       <div id="note-detail-title"></div>
@@ -247,7 +244,6 @@
         <button onclick="deleteNote(currentNoteId)">Excluir</button>
       </div>
     </div>
-
     <!-- Formulário de Adição/Edição -->
     <div id="note-form-container">
       <form id="note-form">
@@ -262,37 +258,30 @@
       </form>
     </div>
   </div>
-
   <div class="bottom-bar">
     <!-- Espaço reservado para futuros botões -->
   </div>
-
   <script>
     // --- CONFIGURAÇÃO INICIAL ---
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
-
     const WEB_APP_URL = getQueryParam("webAppUrl");
     console.log("WEB_APP_URL:", WEB_APP_URL);
-
     // --- VARIÁVEIS GLOBAIS ---
     let allNotes = [];
     let filteredNotes = [];
     let currentNoteId = null;
-
     // --- FUNÇÕES DE INTERFACE ---
     function showSection(sectionId) {
       console.log("Mostrando seção:", sectionId);
-      
       // Esconde todas as seções
       document.getElementById("notes-list-container").style.display = "none";
       document.getElementById("note-detail-container").style.display = "none";
       document.getElementById("note-form-container").style.display = "none";
       document.getElementById("loading-message").style.display = "none";
       document.getElementById("error-message").style.display = "none";
-
       // Mostra a seção especificada
       if (sectionId) {
         const element = document.getElementById(sectionId);
@@ -304,19 +293,16 @@
         }
       }
     }
-
     function displayErrorMessage(message) {
       console.error("Erro:", message);
       document.getElementById("error-message").textContent = message;
       document.getElementById("error-message").style.display = "block";
       showSection();
     }
-
     function updateNoteCounter() {
       const counterElement = document.getElementById("noteCounter");
       counterElement.textContent = `${filteredNotes.length} anotaç${filteredNotes.length === 1 ? "ão" : "ões"}`;
     }
-
     function populateCategoryFilter() {
       const categories = [...new Set(allNotes.map(note => note.category).filter(cat => cat))];
       const filterSelect = document.getElementById("categoryFilter");
@@ -328,12 +314,10 @@
         filterSelect.appendChild(option);
       });
     }
-
     // --- FUNÇÕES DE EXIBIÇÃO DE DADOS ---
     function displayNotesList() {
        const listElement = document.getElementById("notes-list");
        listElement.innerHTML = "";
-
        filteredNotes.forEach(note => {
          const listItem = document.createElement("li");
          listItem.className = "note-item";
@@ -348,11 +332,9 @@
          listItem.addEventListener("click", () => showNoteDetails(note.id));
          listElement.appendChild(listItem);
        });
-
        updateNoteCounter();
        showSection("notes-list-container");
     }
-
     function showNoteDetails(noteId) {
         const note = allNotes.find(n => n.id == noteId);
         if (!note) {
@@ -360,65 +342,51 @@
             return;
         }
         currentNoteId = note.id;
-
         document.getElementById("note-detail-title").textContent = note.title;
         document.getElementById("note-detail-category").textContent = note.category ? `Categoria: ${note.category}` : "";
         document.getElementById("note-detail-content").textContent = note.content.replace(/&#8627;/g, "\n");
-
         document.querySelectorAll(".note-item").forEach(item => {
             item.classList.remove("active");
             if (item.dataset.id == note.id) {
                 item.classList.add("active");
             }
         });
-
         showSection("note-detail-container");
     }
-
     // --- FUNÇÕES DE FORMULÁRIO ---
     function openAddNoteForm() {
         console.log("Abrindo formulário de nova anotação");
-        
         // Limpa os campos do formulário
         document.getElementById("form-note-id").value = "";
         document.getElementById("form-note-title").value = "";
         document.getElementById("form-note-category").value = "";
         document.getElementById("form-note-content").value = "";
-        
         // Mostra o formulário
         showSection("note-form-container");
-        
         // Foca no campo título
         setTimeout(() => {
             document.getElementById("form-note-title").focus();
         }, 100);
     }
-
     function openEditNoteForm(noteId) {
         console.log("Abrindo formulário de edição para:", noteId);
-        
         const note = allNotes.find(n => n.id == noteId);
         if (!note) {
             console.error("Anotação não encontrada para edição:", noteId);
             return;
         }
-        
         document.getElementById("form-note-id").value = note.id;
         document.getElementById("form-note-title").value = note.title;
         document.getElementById("form-note-category").value = note.category || "";
         document.getElementById("form-note-content").value = note.content;
-        
         showSection("note-form-container");
-        
         // Foca no campo título
         setTimeout(() => {
             document.getElementById("form-note-title").focus();
         }, 100);
     }
-
     function cancelForm() {
         console.log("Cancelando formulário");
-        
         if (currentNoteId && allNotes.some(n => n.id == currentNoteId)) {
             showNoteDetails(currentNoteId);
         } else if (filteredNotes.length > 0) {
@@ -427,12 +395,10 @@
             displayNotesList();
         }
     }
-
     // --- FUNÇÕES DE FILTRO E BUSCA ---
     function filterNotes() {
         const searchTerm = document.getElementById("searchInput").value.toLowerCase();
         const categoryFilter = document.getElementById("categoryFilter").value;
-
         filteredNotes = allNotes.filter(note => {
             const matchesSearch = note.title.toLowerCase().includes(searchTerm) ||
                                   note.content.toLowerCase().includes(searchTerm) ||
@@ -440,10 +406,8 @@
             const matchesCategory = categoryFilter === "" || note.category === categoryFilter;
             return matchesSearch && matchesCategory;
         });
-
         displayNotesList();
     }
-
     // --- FUNÇÕES DE COMUNICAÇÃO COM O BACKEND ---
     async function loadNotes() {
         console.log("Iniciando loadNotes...");
@@ -454,7 +418,6 @@
         try {
             showSection("loading-message");
             console.log("Fazendo fetch para:", `${WEB_APP_URL}?action=read`);
-            
             const response = await fetch(`${WEB_APP_URL}?action=read`, {
                 method: "GET",
                 headers: {
@@ -462,19 +425,15 @@
                     'Content-Type': 'application/json'
                 }
             });
-
             console.log("Response status:", response.status);
             console.log("Response headers:", response.headers);
-
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("Erro na resposta:", errorText);
                 throw new Error(`Erro ao carregar dados: ${response.status} - ${errorText}`);
             }
-
             const responseText = await response.text();
             console.log("Response text:", responseText);
-
             let jsonData;
             try {
                 jsonData = JSON.parse(responseText);
@@ -482,14 +441,11 @@
                 console.error("Erro ao fazer parse do JSON:", parseError);
                 throw new Error(`Resposta não é um JSON válido: ${responseText}`);
             }
-
             console.log("Dados recebidos do backend:", jsonData);
-
             if (jsonData.error) {
                  displayErrorMessage(`Erro do servidor: ${jsonData.error}`);
                  return;
             }
-
             if (!Array.isArray(jsonData) || jsonData.length === 0) {
                  allNotes = [];
                  filteredNotes = [];
@@ -498,7 +454,6 @@
                  showSection("notes-list-container"); // Mostra a lista vazia
                  return;
             }
-
             allNotes = jsonData.map(item => ({
                 id: item["ID"] || item["id"] || "",
                 title: item["Título"] || item["Titulo"] || item["title"] || "Sem título",
@@ -507,7 +462,6 @@
                 created: item["Data de Criação"] || item["Data de Criacao"] || item["created"] || "",
                 modified: item["Data de Modificação"] || item["Data de Modificacao"] || item["modified"] || ""
             }));
-
             filteredNotes = [...allNotes];
             populateCategoryFilter();
             filterNotes();
@@ -517,21 +471,19 @@
                 showSection("notes-list-container");
             }
             updateNoteCounter();
-
         } catch (error) {
             console.error("Erro ao carregar anotações:", error);
             displayErrorMessage(`Falha ao carregar anotações: ${error.message}`);
         }
     }
 
+    // --- FUNÇÃO saveNote ATUALIZADA ---
     async function saveNote() {
         console.log("Salvando anotação...");
-        
         if (!WEB_APP_URL) {
-             alert("Erro: 'webAppUrl' não foi fornecido. Não é possível salvar.");
-             return;
+            alert("Erro: 'webAppUrl' não foi fornecido. Não é possível salvar.");
+            return;
         }
-        
         const id = document.getElementById("form-note-id").value;
         const title = document.getElementById("form-note-title").value.trim();
         const category = document.getElementById("form-note-category").value.trim();
@@ -543,25 +495,40 @@
             return;
         }
 
-        const formData = new FormData();
-        formData.append("action", id ? "update" : "create");
-        if (id) formData.append("id", id);
-        formData.append("title", title);
-        formData.append("content", content);
-        formData.append("category", category);
+        // --- CORREÇÃO: Enviar dados como x-www-form-urlencoded em vez de FormData ---
+        const params = new URLSearchParams();
+        params.append("action", id ? "update" : "create");
+        if (id) params.append("id", id);
+        params.append("title", title);
+        params.append("content", content);
+        params.append("category", category);
 
         try {
             const response = await fetch(WEB_APP_URL, {
                 method: "POST",
-                body: formData
+                // headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, // Pode ser opcional, o navegador geralmente define com send(body)
+                body: params // Envia os dados como string de consulta
             });
+
+            console.log("Status da resposta de saveNote:", response.status);
+            console.log("Headers da resposta de saveNote:", [...response.headers.entries()]); // Loga os headers da resposta
 
             if (!response.ok) {
                 const errorText = await response.text();
+                console.error("Erro na resposta de saveNote (text):", errorText);
                 throw new Error(`Erro na requisição: ${response.status} - ${errorText}`);
             }
 
-            const result = await response.json();
+            const resultText = await response.text(); // Lê a resposta como texto primeiro
+            console.log("Texto da resposta de saveNote:", resultText);
+
+            let result;
+            try {
+                result = JSON.parse(resultText); // Tenta parsear como JSON
+            } catch (parseError) {
+                console.error("Erro ao fazer parse do JSON da resposta:", parseError, "Texto recebido:", resultText);
+                throw new Error(`Resposta não é um JSON válido: ${resultText.substring(0, 100)}...`); // Mostra apenas os primeiros 100 chars
+            }
 
             if (result.error) {
                 alert(`Erro: ${result.error}`);
@@ -571,8 +538,18 @@
             if (result.success) {
                 alert(result.message || "Operação realizada com sucesso!");
                 await loadNotes(); // Recarrega as anotações
+                // Após salvar, mostra a lista ou os detalhes da nota salva
+                if (result.newId) {
+                     // Se foi uma criação, mostra os detalhes da nova nota
+                     showNoteDetails(result.newId);
+                } else if (id) {
+                     // Se foi uma atualização, mostra os detalhes da nota atualizada
+                     showNoteDetails(id);
+                } else {
+                     // Caso padrão, mostra a lista
+                     displayNotesList();
+                }
             }
-
         } catch (error) {
             console.error("Erro ao salvar anotação:", error);
             alert(`Falha ao salvar anotação: ${error.message}`);
@@ -581,7 +558,6 @@
 
     async function deleteNote(noteId) {
         console.log("Excluindo anotação:", noteId);
-        
         if (!WEB_APP_URL) {
              alert("Erro: 'webAppUrl' não foi fornecido. Não é possível excluir.");
              return;
@@ -590,49 +566,39 @@
             alert("Erro: ID da anotação não encontrado.");
             return;
         }
-
         if (!confirm("Tem certeza que deseja excluir esta anotação?")) {
             return;
         }
-
         const formData = new FormData();
         formData.append("action", "delete");
         formData.append("id", noteId);
-
         try {
             const response = await fetch(WEB_APP_URL, {
                 method: "POST",
                 body: formData
             });
-
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Erro na requisição: ${response.status} - ${errorText}`);
             }
-
             const result = await response.json();
-
             if (result.error) {
                 alert(`Erro: ${result.error}`);
                 return;
             }
-
             if (result.success) {
                 alert(result.message || "Anotação excluída com sucesso!");
                 await loadNotes(); // Recarrega as anotações
             }
-
         } catch (error) {
             console.error("Erro ao excluir anotação:", error);
             alert(`Falha ao excluir anotação: ${error.message}`);
         }
     }
-
     // --- EVENT LISTENERS E INICIALIZAÇÃO ---
     document.addEventListener("DOMContentLoaded", function() {
         console.log("DOM carregado, inicializando aplicação...");
         console.log("WEB_APP_URL configurado:", WEB_APP_URL);
-        
         // Event listener para o formulário
         const form = document.getElementById("note-form");
         if (form) {
@@ -642,19 +608,15 @@
                 saveNote();
             });
         }
-
         // Carrega as anotações ao inicializar
         loadNotes();
-        
         console.log("Aplicação inicializada");
     });
-
     // Função de teste para debug
     function testOpenForm() {
         console.log("Teste: abrindo formulário");
         openAddNoteForm();
     }
-
     // Função de teste para verificar se o botão funciona
     window.testButton = function() {
         console.log("Botão testado!");
@@ -663,4 +625,3 @@
   </script>
 </body>
 </html>
-
