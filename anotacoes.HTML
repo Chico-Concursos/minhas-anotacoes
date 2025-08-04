@@ -750,10 +750,7 @@
         const statusElement = document.getElementById("connection-status");
         statusElement.innerHTML = `<i class="fas fa-sync fa-spin"></i> <span>Conectando ao Web App...</span>`;
         
-        // Simula um tempo de carregamento
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Faz a requisição real para o Web App
+        // Faz a requisição para o Web App
         const response = await fetch(`${WEB_APP_URL}?action=read`);
         
         if (!response.ok) {
@@ -812,31 +809,33 @@
 
       try {
         // Prepara os dados para envio
-        const formData = new FormData();
-        formData.append("action", id ? "update" : "create");
-        if (id) formData.append("id", id);
-        formData.append("title", title);
-        formData.append("content", content);
-        formData.append("category", category);
+        const params = new URLSearchParams();
+        params.append("action", id ? "update" : "create");
+        if (id) params.append("id", id);
+        params.append("title", title);
+        params.append("content", content);
+        params.append("category", category);
         
         // Faz a requisição POST
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
-          body: formData
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params
         });
-        
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}: ${response.statusText}`);
-        }
         
         const result = await response.json();
         
         if (result.error) {
-          alert(`Erro: ${result.error}`);
-          return;
+          throw new Error(result.error);
         }
         
-        alert(result.message || "Operação realizada com sucesso!");
+        if (!result.success) {
+          throw new Error(result.message || "Erro desconhecido ao salvar");
+        }
+        
+        alert("Operação realizada com sucesso!");
         
         // Recarrega as anotações após salvar
         await loadNotes();
@@ -864,28 +863,30 @@
 
       try {
         // Prepara os dados para envio
-        const formData = new FormData();
-        formData.append("action", "delete");
-        formData.append("id", noteId);
+        const params = new URLSearchParams();
+        params.append("action", "delete");
+        params.append("id", noteId);
         
         // Faz a requisição POST
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
-          body: formData
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params
         });
-        
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}: ${response.statusText}`);
-        }
         
         const result = await response.json();
         
         if (result.error) {
-          alert(`Erro: ${result.error}`);
-          return;
+          throw new Error(result.error);
         }
         
-        alert(result.message || "Anotação excluída com sucesso!");
+        if (!result.success) {
+          throw new Error(result.message || "Erro desconhecido ao excluir");
+        }
+        
+        alert("Anotação excluída com sucesso!");
         
         // Recarrega as anotações após excluir
         await loadNotes();
