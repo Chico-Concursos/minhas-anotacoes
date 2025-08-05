@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anotações por Página</title>
+  <title>Sistema de Anotações - Google Sites</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -26,6 +26,10 @@
     .container {
       max-width: 1200px;
       width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
     header {
@@ -97,6 +101,12 @@
       font-weight: bold;
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
       font-size: 1.05rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .top-bar button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
     
     .top-bar input[type="text"] {
@@ -106,6 +116,12 @@
       border-radius: 50px;
       font-size: 1.05rem;
       min-width: 250px;
+      transition: border-color 0.3s;
+    }
+    
+    .top-bar input[type="text"]:focus {
+      border-color: #1a2a6c;
+      outline: none;
     }
     
     .top-bar select {
@@ -115,6 +131,12 @@
       background: white;
       font-size: 1.05rem;
       min-width: 180px;
+      transition: border-color 0.3s;
+    }
+    
+    .top-bar select:focus {
+      border-color: #1a2a6c;
+      outline: none;
     }
     
     .note-counter {
@@ -142,6 +164,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.3s;
     }
     
     .list-header {
@@ -165,6 +188,11 @@
       padding: 18px;
       border-bottom: 1px solid #eee;
       cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .note-item:hover {
+      background: #f0f7ff;
     }
     
     .note-item.active {
@@ -197,6 +225,7 @@
       display: flex;
       flex-direction: column;
       background: white;
+      transition: transform 0.3s;
     }
     
     #note-detail-title {
@@ -246,6 +275,12 @@
       align-items: center;
       gap: 10px;
       font-size: 1.05rem;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    
+    .note-actions button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
     
     .btn-edit {
@@ -276,6 +311,12 @@
       border: 2px solid #ddd;
       border-radius: 10px;
       font-size: 1.05rem;
+      transition: border-color 0.3s;
+    }
+    
+    #note-form input:focus, #note-form textarea:focus {
+      border-color: #1a2a6c;
+      outline: none;
     }
     
     #note-form textarea {
@@ -296,6 +337,12 @@
       cursor: pointer;
       font-weight: bold;
       font-size: 1.1rem;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    
+    .form-actions button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
     
     .btn-save {
@@ -324,6 +371,7 @@
       border-radius: 15px;
       max-width: 500px;
       width: 100%;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     
     #login-form h2 {
@@ -338,6 +386,12 @@
       border: 2px solid #ddd;
       border-radius: 8px;
       font-size: 1.05rem;
+      transition: border-color 0.3s;
+    }
+    
+    #login-form input:focus {
+      border-color: #1a2a6c;
+      outline: none;
     }
     
     #login-form button {
@@ -350,6 +404,12 @@
       cursor: pointer;
       font-weight: bold;
       width: 100%;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    
+    #login-form button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
     
     #loading-message, #error-message {
@@ -363,6 +423,7 @@
       text-align: center;
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
+      padding: 30px;
     }
     
     #loading-message i {
@@ -373,7 +434,6 @@
     
     #error-message {
       color: #b21f1f;
-      padding: 30px;
     }
     
     footer {
@@ -405,6 +465,11 @@
       gap: 15px;
       animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.7s forwards;
       border-left: 5px solid #4CAF50;
+      transition: transform 0.3s;
+    }
+    
+    .notification:hover {
+      transform: translateY(-3px);
     }
     
     .notification.error {
@@ -438,6 +503,11 @@
       cursor: pointer;
       font-size: 1.2rem;
       color: #777;
+      transition: color 0.3s;
+    }
+    
+    .notification-close:hover {
+      color: #333;
     }
     
     /* Modal de Confirmação */
@@ -461,6 +531,9 @@
       padding: 30px;
       max-width: 500px;
       width: 90%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      transform: translateY(-20px);
+      animation: modalAppear 0.4s ease forwards;
     }
     
     .modal h3 {
@@ -488,6 +561,12 @@
       cursor: pointer;
       font-weight: bold;
       font-size: 1rem;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    
+    .modal-buttons button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
     
     .btn-modal-confirm {
@@ -498,6 +577,27 @@
     .btn-modal-cancel {
       background: #f44336;
       color: white;
+    }
+    
+    /* Estilo para o identificador da página */
+    .page-identifier {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-top: 15px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100%;
+    }
+    
+    .page-identifier i {
+      color: #ffcc00;
     }
     
     /* Animações */
@@ -516,11 +616,17 @@
       to { opacity: 0; }
     }
     
+    @keyframes modalAppear {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     /* Responsivo */
     @media (max-width: 900px) {
       #main-container {
         flex-direction: column;
-        height: 850px;
+        height: auto;
+        min-height: 850px;
       }
       
       header h1 {
@@ -540,22 +646,25 @@
         flex-direction: column;
         gap: 15px;
       }
+      
+      .notes-app {
+        padding: 20px;
+      }
     }
     
-    /* Estilo para o identificador da página */
-    .page-identifier {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      padding: 12px 20px;
-      margin-top: 15px;
-      color: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .page-identifier i {
-      color: #ffcc00;
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      .page-identifier {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+      }
     }
   </style>
 </head>
@@ -563,11 +672,7 @@
   <div class="container">
     <header>
       <h1><i class="fas fa-book"></i> Sistema de Anotações</h1>
-      <p>Acesse com seu e-mail para ver suas anotações desta página</p>
-      <div class="page-identifier">
-        <i class="fas fa-link"></i>
-        <span id="page-identifier-display">Carregando identificador da página...</span>
-      </div>
+      <p>Acesse com seu e-mail para ver suas anotações</p>
     </header>
     
     <div class="app-container">
@@ -612,7 +717,7 @@
             
             <div id="notes-list-container" style="display:none;">
               <div class="list-header">
-                <span>Anotações desta página</span>
+                <span>Suas Anotações</span>
                 <span id="filtered-counter">0/0</span>
               </div>
               <ul id="notes-list"></ul>
@@ -658,8 +763,14 @@
       </div>
     </div>
     
+    <!-- Identificador da página do Google Sites (na parte inferior) -->
+    <div class="page-identifier">
+      <i class="fas fa-link"></i>
+      <span id="page-identifier-display">Vinculado à página: Carregando...</span>
+    </div>
+    
     <footer>
-      <p>Chico Concursos</p>
+      <p>Sistema de Anotações para Google Sites &copy; 2023</p>
     </footer>
   </div>
 
@@ -681,17 +792,74 @@
   <script>
     // --- CONFIGURAÇÃO INICIAL ---
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeWFpisAExqCY5FscF_tF5c_WUWavp3Y-8MPkgPhL3Mj0RoDikM4432hmnDhc-g79Y/exec";
-
+    
     // --- VARIÁVEIS GLOBAIS ---
     let allNotes = [];
     let filteredNotes = [];
     let currentNoteId = null;
     let userEmail = null;
     let deleteCallback = null;
+    let googleSitesPageId = '';
     
-    // Identificador único da página (baseado no caminho da URL)
-    const pageIdentifier = window.location.pathname.split('/').pop() || 'homepage';
+    // --- INICIALIZAÇÃO ---
+    document.addEventListener("DOMContentLoaded", function() {
+      // Tenta obter o ID da página do Google Sites
+      getGoogleSitesPageId();
+      
+      // Configura os event listeners
+      const noteForm = document.getElementById("note-form");
+      if (noteForm) {
+        noteForm.addEventListener("submit", function(e) {
+          e.preventDefault();
+          saveNote();
+        });
+      }
+      
+      const loginForm = document.getElementById("login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", function(e) {
+          e.preventDefault();
+          login();
+        });
+      }
 
+      // Verifica se há email salvo no localStorage
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedEmail) {
+        userEmail = savedEmail;
+        document.getElementById('user-email-display').textContent = savedEmail;
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('app-content').style.display = 'block';
+        loadNotes();
+      }
+    });
+    
+    // Função para obter o ID da página do Google Sites
+    function getGoogleSitesPageId() {
+      try {
+        // Tenta obter o ID da página do Google Sites
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageId = urlParams.get('pageId');
+        
+        // Se não encontrou, tenta extrair da URL
+        if (!pageId) {
+          const pathSegments = window.location.pathname.split('/').filter(s => s);
+          googleSitesPageId = pathSegments[pathSegments.length - 1] || 'homepage';
+        } else {
+          googleSitesPageId = pageId;
+        }
+        
+        // Atualiza o display
+        document.getElementById('page-identifier-display').textContent = 
+          `Vinculado à página: ${googleSitesPageId}`;
+          
+      } catch (e) {
+        console.error("Erro ao obter ID da página:", e);
+        document.getElementById('page-identifier-display').textContent = 
+          "Vinculado à página: Não identificada";
+      }
+    }
+    
     // --- SISTEMA DE NOTIFICAÇÃO ---
     function showNotification(message, type = 'success') {
       const container = document.getElementById('notification-container');
@@ -757,11 +925,6 @@
     }
 
     function updateNoteCounter() {
-      const counterElement = document.getElementById("noteCounter");
-      if (counterElement) {
-        counterElement.textContent = `${allNotes.length} anotaç${allNotes.length === 1 ? "ão" : "ões"}`;
-      }
-      
       const filteredCounter = document.getElementById("filtered-counter");
       if (filteredCounter) {
         filteredCounter.textContent = `${filteredNotes.length}/${allNotes.length}`;
@@ -931,7 +1094,9 @@
         showSection("loading-message");
         
         // Inclui o identificador da página na requisição
-        const response = await fetch(`${WEB_APP_URL}?action=read&userEmail=${encodeURIComponent(userEmail)}&pageId=${encodeURIComponent(pageIdentifier)}`);
+        const response = await fetch(
+          `${WEB_APP_URL}?action=read&userEmail=${encodeURIComponent(userEmail)}&pageId=${encodeURIComponent(googleSitesPageId)}`
+        );
         
         if (!response.ok) {
           throw new Error(`Erro ${response.status}`);
@@ -990,7 +1155,7 @@
         params.append("userEmail", userEmail);
         
         // Adiciona o identificador da página
-        params.append("pageId", pageIdentifier);
+        params.append("pageId", googleSitesPageId);
         
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
@@ -1060,38 +1225,6 @@
         }
       });
     }
-
-    // --- INICIALIZAÇÃO ---
-    document.addEventListener("DOMContentLoaded", function() {
-      // Exibe o identificador da página
-      document.getElementById('page-identifier-display').textContent = 
-        `Página: ${pageIdentifier}`;
-      
-      const noteForm = document.getElementById("note-form");
-      if (noteForm) {
-        noteForm.addEventListener("submit", function(e) {
-          e.preventDefault();
-          saveNote();
-        });
-      }
-      
-      const loginForm = document.getElementById("login-form");
-      if (loginForm) {
-        loginForm.addEventListener("submit", function(e) {
-          e.preventDefault();
-          login();
-        });
-      }
-
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedEmail) {
-        userEmail = savedEmail;
-        document.getElementById('user-email-display').textContent = savedEmail;
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('app-content').style.display = 'block';
-        loadNotes();
-      }
-    });
   </script>
 </body>
 </html>
