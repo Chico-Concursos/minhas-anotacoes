@@ -770,6 +770,7 @@
     </div>
     
     <footer>
+      <p>Sistema de Anotações para Google Sites &copy; 2023</p>
     </footer>
   </div>
 
@@ -790,7 +791,7 @@
 
   <script>
     // --- CONFIGURAÇÃO INICIAL ---
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeWFpisAExqCY5FscF_tF5c_WUWavp3Y-8MPkgPhL3Mj0RoDikM4432hmnDhc-g79Y/exec";
+    let WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeWFpisAExqCY5FscF_tF5c_WUWavp3Y-8MPkgPhL3Mj0RoDikM4432hmnDhc-g79Y/exec";
     
     // --- VARIÁVEIS GLOBAIS ---
     let allNotes = [];
@@ -802,8 +803,8 @@
     
     // --- INICIALIZAÇÃO ---
     document.addEventListener("DOMContentLoaded", function() {
-      // Tenta obter o ID da página do Google Sites
-      getGoogleSitesPageId();
+      // Tenta obter o ID da página do Google Sites e a URL do App Script
+      getParametersFromURL();
       
       // Configura os event listeners
       const noteForm = document.getElementById("note-form");
@@ -833,19 +834,29 @@
       }
     });
     
-    // Função para obter o ID da página do Google Sites
-    function getGoogleSitesPageId() {
+    // Função para obter parâmetros da URL
+    function getParametersFromURL() {
       try {
-        // Tenta obter o googleSitesPageId da URL
         const urlParams = new URLSearchParams(window.location.search);
+        
+        // Obtém a URL do Web App (se fornecida)
+        const customWebAppUrl = urlParams.get('webAppUrl');
+        if (customWebAppUrl) {
+          WEB_APP_URL = customWebAppUrl;
+        }
+        
+        // Obtém o ID da página do Google Sites
         googleSitesPageId = urlParams.get('googleSitesPageId') || '';
+        
+        // Remove espaços e caracteres especiais
+        googleSitesPageId = googleSitesPageId.replace(/[^a-zA-Z0-9-_]/g, '');
         
         // Atualiza o display
         document.getElementById('page-identifier-display').textContent = 
           `Vinculado à página: ${googleSitesPageId || 'Não identificada'}`;
           
       } catch (e) {
-        console.error("Erro ao obter ID da página:", e);
+        console.error("Erro ao obter parâmetros da URL:", e);
         document.getElementById('page-identifier-display').textContent = 
           "Vinculado à página: Não identificada";
       }
@@ -1080,6 +1091,10 @@
     // --- FUNÇÕES DE COMUNICAÇÃO COM O BACKEND ---
     async function loadNotes() {
       if (!userEmail) return;
+      if (!googleSitesPageId) {
+        showNotification('ID da página não identificado. As anotações não serão carregadas.', 'error');
+        return;
+      }
       
       try {
         showSection("loading-message");
@@ -1093,9 +1108,14 @@
           throw new Error(`Erro ${response.status}`);
         }
         
-        const notes = await response.json();
+        const result = await response.json();
         
-        allNotes = notes.map(item => ({
+        // Verifica se o resultado é um array
+        if (!Array.isArray(result)) {
+          throw new Error('Resposta do servidor inválida');
+        }
+        
+        allNotes = result.map(item => ({
           id: item["ID"] || "",
           title: item["Título"] || "Sem título",
           content: item["Conteúdo"] || "",
@@ -1115,6 +1135,7 @@
         updateNoteCounter();
         
       } catch (error) {
+        console.error("Erro ao carregar anotações:", error);
         showNotification(`Falha ao carregar anotações: ${error.message}`, 'error');
       }
     }
@@ -1122,6 +1143,11 @@
     async function saveNote() {
       if (!userEmail) {
         showNotification('Usuário não autenticado.', 'error');
+        return;
+      }
+      
+      if (!googleSitesPageId) {
+        showNotification('ID da página não identificado. A anotação não será salva.', 'error');
         return;
       }
       
@@ -1168,6 +1194,7 @@
         await loadNotes();
         
       } catch (error) {
+        console.error("Erro ao salvar anotação:", error);
         showNotification(`Erro ao salvar: ${error.message}`, 'error');
       }
     }
@@ -1175,6 +1202,11 @@
     async function deleteNote(noteId) {
       if (!userEmail) {
         showNotification('Usuário não autenticado.', 'error');
+        return;
+      }
+      
+      if (!googleSitesPageId) {
+        showNotification('ID da página não identificado. A anotação não será excluída.', 'error');
         return;
       }
       
@@ -1190,6 +1222,7 @@
             params.append("action", "delete");
             params.append("id", noteId);
             params.append("userEmail", userEmail);
+            params.append("pageId", googleSitesPageId);
             
             const response = await fetch(WEB_APP_URL, {
               method: "POST",
@@ -1211,6 +1244,7 @@
             await loadNotes();
             
           } catch (error) {
+            console.error("Erro ao excluir anotação:", error);
             showNotification(`Erro ao excluir: ${error.message}`, 'error');
           }
         }
