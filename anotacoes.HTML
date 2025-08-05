@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anotações - Google Sites</title>
+  <title>Sistema de Anotações - Correção</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -600,6 +600,35 @@
       color: #ffcc00;
     }
     
+    .debug-info {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .debug-info h4 {
+      margin-bottom: 10px;
+      color: #ffcc00;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .debug-toggle {
+      background: #1a2a6c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
     /* Animações */
     @keyframes spin {
       from { transform: rotate(0deg); }
@@ -769,6 +798,16 @@
       <span id="page-identifier-display">Vinculado à página: Carregando...</span>
     </div>
     
+    <!-- Área de depuração -->
+    <div class="debug-info" id="debug-info" style="display: none;">
+      <h4><i class="fas fa-bug"></i> Informações de Depuração</h4>
+      <div id="debug-content"></div>
+    </div>
+    
+    <button class="debug-toggle" onclick="toggleDebug()">
+      <i class="fas fa-code"></i> Mostrar/Ocultar Depuração
+    </button>
+    
     <footer>
       <p>Sistema de Anotações para Google Sites &copy; 2023</p>
     </footer>
@@ -832,6 +871,9 @@
         document.getElementById('app-content').style.display = 'block';
         loadNotes();
       }
+      
+      // Mostra o link atual para depuração
+      logDebug(`URL Atual: ${window.location.href}`);
     });
     
     // Função para obter parâmetros da URL
@@ -843,13 +885,16 @@
         const customWebAppUrl = urlParams.get('webAppUrl');
         if (customWebAppUrl) {
           WEB_APP_URL = customWebAppUrl;
+          logDebug(`Usando WEB_APP_URL: ${WEB_APP_URL}`);
         }
         
         // Obtém o ID da página do Google Sites
         googleSitesPageId = urlParams.get('googleSitesPageId') || '';
+        logDebug(`googleSitesPageId: ${googleSitesPageId}`);
         
         // Remove espaços e caracteres especiais
         googleSitesPageId = googleSitesPageId.replace(/[^a-zA-Z0-9-_]/g, '');
+        logDebug(`googleSitesPageId sanitizado: ${googleSitesPageId}`);
         
         // Atualiza o display
         document.getElementById('page-identifier-display').textContent = 
@@ -857,9 +902,26 @@
           
       } catch (e) {
         console.error("Erro ao obter parâmetros da URL:", e);
+        logDebug(`Erro ao obter parâmetros: ${e.message}`);
         document.getElementById('page-identifier-display').textContent = 
           "Vinculado à página: Não identificada";
       }
+    }
+    
+    // Funções de depuração
+    function logDebug(message) {
+      const debugContent = document.getElementById('debug-content');
+      if (debugContent) {
+        const p = document.createElement('p');
+        p.textContent = `[DEBUG] ${new Date().toLocaleTimeString()}: ${message}`;
+        debugContent.appendChild(p);
+      }
+      console.debug(message);
+    }
+    
+    function toggleDebug() {
+      const debugInfo = document.getElementById('debug-info');
+      debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
     }
     
     // --- SISTEMA DE NOTIFICAÇÃO ---
@@ -889,6 +951,8 @@
           notification.remove();
         }
       }, 5000);
+      
+      logDebug(`Notificação: ${type} - ${message}`);
     }
     
     // --- MODAL DE CONFIRMAÇÃO ---
@@ -1099,16 +1163,27 @@
       try {
         showSection("loading-message");
         
-        // Inclui o identificador da página na requisição
-        const response = await fetch(
-          `${WEB_APP_URL}?action=read&userEmail=${encodeURIComponent(userEmail)}&pageId=${encodeURIComponent(googleSitesPageId)}`
-        );
+        // URL com parâmetros de depuração
+        const url = new URL(WEB_APP_URL);
+        url.searchParams.append('action', 'read');
+        url.searchParams.append('userEmail', userEmail);
+        url.searchParams.append('pageId', googleSitesPageId);
+        url.searchParams.append('debug', 'true');
+        
+        logDebug(`Carregando anotações de: ${url.toString()}`);
+        
+        const response = await fetch(url, {
+          redirect: 'follow'
+        });
+        
+        logDebug(`Resposta recebida. Status: ${response.status}`);
         
         if (!response.ok) {
           throw new Error(`Erro ${response.status}`);
         }
         
         const result = await response.json();
+        logDebug(`Dados recebidos: ${JSON.stringify(result).substring(0, 200)}...`);
         
         // Verifica se o resultado é um array
         if (!Array.isArray(result)) {
@@ -1123,6 +1198,8 @@
           created: item["Data de Criação"] || ""
         }));
         
+        logDebug(`Total de anotações carregadas: ${allNotes.length}`);
+        
         filteredNotes = [...allNotes];
         populateCategoryFilter();
         
@@ -1136,6 +1213,7 @@
         
       } catch (error) {
         console.error("Erro ao carregar anotações:", error);
+        logDebug(`Erro ao carregar anotações: ${error.message}`);
         showNotification(`Falha ao carregar anotações: ${error.message}`, 'error');
       }
     }
@@ -1163,6 +1241,7 @@
       }
 
       try {
+        const url = new URL(WEB_APP_URL);
         const params = new URLSearchParams();
         params.append("action", noteId ? "update" : "create");
         if (noteId) params.append("id", noteId);
@@ -1170,17 +1249,23 @@
         params.append("content", content);
         params.append("category", category);
         params.append("userEmail", userEmail);
-        
-        // Adiciona o identificador da página
         params.append("pageId", googleSitesPageId);
+        params.append("debug", "true");
         
-        const response = await fetch(WEB_APP_URL, {
+        logDebug(`Enviando para: ${url.toString()}`);
+        logDebug(`Parâmetros: ${params.toString()}`);
+        
+        const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: params
+          body: params,
+          redirect: 'follow'
         });
         
+        logDebug(`Resposta recebida. Status: ${response.status}`);
+        
         const result = await response.json();
+        logDebug(`Resultado: ${JSON.stringify(result)}`);
         
         if (result.error) {
           throw new Error(result.error);
@@ -1195,6 +1280,7 @@
         
       } catch (error) {
         console.error("Erro ao salvar anotação:", error);
+        logDebug(`Erro ao salvar: ${error.message}`);
         showNotification(`Erro ao salvar: ${error.message}`, 'error');
       }
     }
@@ -1218,19 +1304,28 @@
       showConfirm('Tem certeza que deseja excluir esta anotação?', async (confirmed) => {
         if (confirmed) {
           try {
+            const url = new URL(WEB_APP_URL);
             const params = new URLSearchParams();
             params.append("action", "delete");
             params.append("id", noteId);
             params.append("userEmail", userEmail);
             params.append("pageId", googleSitesPageId);
+            params.append("debug", "true");
             
-            const response = await fetch(WEB_APP_URL, {
+            logDebug(`Enviando para: ${url.toString()}`);
+            logDebug(`Parâmetros: ${params.toString()}`);
+            
+            const response = await fetch(url, {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: params
+              body: params,
+              redirect: 'follow'
             });
             
+            logDebug(`Resposta recebida. Status: ${response.status}`);
+            
             const result = await response.json();
+            logDebug(`Resultado: ${JSON.stringify(result)}`);
             
             if (result.error) {
               throw new Error(result.error);
@@ -1245,6 +1340,7 @@
             
           } catch (error) {
             console.error("Erro ao excluir anotação:", error);
+            logDebug(`Erro ao excluir: ${error.message}`);
             showNotification(`Erro ao excluir: ${error.message}`, 'error');
           }
         }
