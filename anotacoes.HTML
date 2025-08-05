@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anotações com Notificações</title>
+  <title>Sistema de Anotações por Página</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -541,13 +541,33 @@
         gap: 15px;
       }
     }
+    
+    /* Estilo para o identificador da página */
+    .page-identifier {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-top: 15px;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .page-identifier i {
+      color: #ffcc00;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1><i class="fas fa-book"></i> Sistema de Anotações</h1>
-      <p>Acesse com seu e-mail para ver suas anotações</p>
+      <p>Acesse com seu e-mail para ver suas anotações desta página</p>
+      <div class="page-identifier">
+        <i class="fas fa-link"></i>
+        <span id="page-identifier-display">Carregando identificador da página...</span>
+      </div>
     </header>
     
     <div class="app-container">
@@ -592,7 +612,7 @@
             
             <div id="notes-list-container" style="display:none;">
               <div class="list-header">
-                <span>Suas Anotações</span>
+                <span>Anotações desta página</span>
                 <span id="filtered-counter">0/0</span>
               </div>
               <ul id="notes-list"></ul>
@@ -639,7 +659,7 @@
     </div>
     
     <footer>
-      <p>Sistema de Anotações &copy; 2023</p>
+      <p>Chico Concursos</p>
     </footer>
   </div>
 
@@ -668,6 +688,9 @@
     let currentNoteId = null;
     let userEmail = null;
     let deleteCallback = null;
+    
+    // Identificador único da página (baseado no caminho da URL)
+    const pageIdentifier = window.location.pathname.split('/').pop() || 'homepage';
 
     // --- SISTEMA DE NOTIFICAÇÃO ---
     function showNotification(message, type = 'success') {
@@ -907,7 +930,8 @@
       try {
         showSection("loading-message");
         
-        const response = await fetch(`${WEB_APP_URL}?action=read&userEmail=${encodeURIComponent(userEmail)}`);
+        // Inclui o identificador da página na requisição
+        const response = await fetch(`${WEB_APP_URL}?action=read&userEmail=${encodeURIComponent(userEmail)}&pageId=${encodeURIComponent(pageIdentifier)}`);
         
         if (!response.ok) {
           throw new Error(`Erro ${response.status}`);
@@ -964,6 +988,9 @@
         params.append("content", content);
         params.append("category", category);
         params.append("userEmail", userEmail);
+        
+        // Adiciona o identificador da página
+        params.append("pageId", pageIdentifier);
         
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
@@ -1036,6 +1063,10 @@
 
     // --- INICIALIZAÇÃO ---
     document.addEventListener("DOMContentLoaded", function() {
+      // Exibe o identificador da página
+      document.getElementById('page-identifier-display').textContent = 
+        `Página: ${pageIdentifier}`;
+      
       const noteForm = document.getElementById("note-form");
       if (noteForm) {
         noteForm.addEventListener("submit", function(e) {
