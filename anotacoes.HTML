@@ -600,6 +600,69 @@
       color: #ffcc00;
     }
     
+    .link-generator {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .link-generator h3 {
+      color: #1a2a6c;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .link-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .link-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8f9fa;
+    }
+    
+    .copy-btn {
+      background: #1a2a6c;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    
+    .copy-btn:hover {
+      background: #0d1a4d;
+    }
+    
+    .link-instructions {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-top: 15px;
+    }
+    
+    .link-instructions ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    
+    .link-instructions li {
+      margin-bottom: 8px;
+    }
+    
     /* Animações */
     @keyframes spin {
       from { transform: rotate(0deg); }
@@ -649,6 +712,10 @@
       
       .notes-app {
         padding: 20px;
+      }
+      
+      .link-input-group {
+        flex-direction: column;
       }
     }
     
@@ -759,6 +826,27 @@
               </form>
             </div>
           </div>
+          
+          <!-- Gerador de Link para Google Sites -->
+          <div class="link-generator">
+            <h3><i class="fas fa-link"></i> Link para Google Sites</h3>
+            <div class="link-input-group">
+              <input type="text" id="google-sites-link" class="link-input" readonly
+                value="https://chico-concursos.github.io/minhas-anotacoes/anotacoes.HTML?webAppUrl=https://script.google.com/macros/s/AKfycbyeWFpisAExqCY5FscF_tF5c_WUWavp3Y-8MPkgPhL3Mj0RoDikM4432hmnDhc-g79Y/exec&googleSitesPageId=ID_DA_PAGINA">
+              <button class="copy-btn" onclick="copyToClipboard()">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="link-instructions">
+              <p><strong>Como usar:</strong></p>
+              <ul>
+                <li>Substitua <code>ID_DA_PAGINA</code> pelo identificador único da sua página no Google Sites</li>
+                <li>Cole este link em um bloco HTML no Google Sites</li>
+                <li>As anotações serão vinculadas à página específica</li>
+              </ul>
+              <p><i class="fas fa-lightbulb"></i> Dica: Use um ID único para cada página do seu site</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -837,27 +925,29 @@
     // Função para obter o ID da página do Google Sites
     function getGoogleSitesPageId() {
       try {
-        // Tenta obter o ID da página do Google Sites
+        // Tenta obter o googleSitesPageId da URL
         const urlParams = new URLSearchParams(window.location.search);
-        const pageId = urlParams.get('pageId');
-        
-        // Se não encontrou, tenta extrair da URL
-        if (!pageId) {
-          const pathSegments = window.location.pathname.split('/').filter(s => s);
-          googleSitesPageId = pathSegments[pathSegments.length - 1] || 'homepage';
-        } else {
-          googleSitesPageId = pageId;
-        }
+        googleSitesPageId = urlParams.get('googleSitesPageId') || '';
         
         // Atualiza o display
         document.getElementById('page-identifier-display').textContent = 
-          `Vinculado à página: ${googleSitesPageId}`;
+          `Vinculado à página: ${googleSitesPageId || 'Não identificada'}`;
           
       } catch (e) {
         console.error("Erro ao obter ID da página:", e);
         document.getElementById('page-identifier-display').textContent = 
           "Vinculado à página: Não identificada";
       }
+    }
+    
+    // Função para copiar o link para a área de transferência
+    function copyToClipboard() {
+      const linkInput = document.getElementById('google-sites-link');
+      linkInput.select();
+      document.execCommand('copy');
+      
+      // Mostra notificação
+      showNotification('Link copiado para a área de transferência!');
     }
     
     // --- SISTEMA DE NOTIFICAÇÃO ---
