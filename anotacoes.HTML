@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anotações - Correção</title>
+  <title>Sistema de Anotações - Container Ampliado</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -24,7 +24,7 @@
     }
     
     .container {
-      max-width: 1200px;
+      max-width: 1400px; /* Aumentado para acomodar o conteúdo expandido */
       width: 100%;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
@@ -34,7 +34,7 @@
     
     header {
       text-align: center;
-      padding: 30px 0;
+      padding: 15px 0;
       color: white;
     }
     
@@ -45,7 +45,7 @@
     }
     
     .app-container {
-      margin-top: 20px;
+      margin-top: 15px;
     }
     
     .notes-app {
@@ -60,8 +60,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #eee;
       flex-wrap: wrap;
     }
@@ -85,7 +85,7 @@
       display: flex;
       gap: 15px;
       flex-wrap: wrap;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
     
     .top-bar button {
@@ -165,6 +165,8 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.3s;
+      min-width: 300px;
+      max-width: 400px;
     }
     
     .list-header {
@@ -218,7 +220,7 @@
     }
     
     #note-detail-container {
-      flex: 2;
+      flex: 3; /* Aumentado para ocupar mais espaço */
       border: 2px solid #e0e0e0;
       border-radius: 12px;
       padding: 25px;
@@ -226,6 +228,7 @@
       flex-direction: column;
       background: white;
       transition: transform 0.3s;
+      position: relative;
     }
     
     #note-detail-title {
@@ -251,10 +254,49 @@
       flex: 1;
       white-space: pre-wrap;
       line-height: 1.7;
-      overflow-y: auto;
-      padding: 12px 0;
+      padding: 15px;
       font-size: 1.05rem;
       color: #444;
+      max-height: calc(100% - 150px);
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      
+      /* Controle de conteúdo longo */
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: auto;
+      word-break: break-word;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      
+      /* Container com rolagem interna */
+      display: block;
+      position: relative;
+    }
+    
+    /* Controles para redimensionar */
+    .resize-handle {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      background: #1a2a6c;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s;
+    }
+    
+    .resize-handle:hover {
+      transform: scale(1.1);
+      background: #b21f1f;
     }
     
     .note-actions {
@@ -262,7 +304,7 @@
       gap: 15px;
       padding-top: 20px;
       border-top: 2px solid #eee;
-      margin-top: 10px;
+      margin-top: auto;
     }
     
     .note-actions button {
@@ -297,6 +339,7 @@
       display: none;
       flex-direction: column;
       height: 100%;
+      flex: 3; /* Aumentado para ocupar mais espaço */
     }
     
     #note-form {
@@ -321,7 +364,10 @@
     
     #note-form textarea {
       flex: 1;
-      resize: none;
+      resize: vertical;
+      min-height: 300px;
+      max-width: 100%;
+      overflow-wrap: break-word;
     }
     
     .form-actions {
@@ -434,14 +480,6 @@
     
     #error-message {
       color: #b21f1f;
-    }
-    
-    footer {
-      text-align: center;
-      color: rgba(255, 255, 255, 0.85);
-      padding: 30px 0;
-      margin-top: 30px;
-      font-size: 0.95rem;
     }
     
     /* Sistema de Notificação */
@@ -629,6 +667,21 @@
       margin-top: 10px;
     }
     
+    /* Botão de logout */
+    .logout-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #1a2a6c;
+      font-size: 1.2rem;
+      margin-left: 10px;
+      transition: color 0.3s;
+    }
+    
+    .logout-button:hover {
+      color: #b21f1f;
+    }
+    
     /* Animações */
     @keyframes spin {
       from { transform: rotate(0deg); }
@@ -679,6 +732,16 @@
       .notes-app {
         padding: 20px;
       }
+      
+      #notes-list-container {
+        min-width: unset;
+        max-width: unset;
+      }
+      
+      #note-detail-content {
+        max-width: 100%;
+        overflow-x: auto;
+      }
     }
     
     @media (max-width: 600px) {
@@ -723,6 +786,10 @@
             <div class="user-info">
               <i class="fas fa-user-circle"></i>
               <span id="user-email-display">usuario@exemplo.com</span>
+              <!-- Botão de logout -->
+              <button class="logout-button" onclick="logout()" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+              </button>
             </div>
           </div>
           
@@ -753,13 +820,27 @@
             </div>
             
             <div id="note-detail-container" style="display:none;">
+              <!-- Botão para expandir -->
+              <div class="resize-handle" title="Expandir/Contrair" onclick="toggleContainerSize()">
+                <i class="fas fa-expand"></i>
+              </div>
+              
               <div id="note-detail-title">Título da Anotação</div>
               <div id="note-detail-category">
                 <i class="fas fa-tag"></i>
                 <span>Categoria</span>
               </div>
               <div id="note-detail-content">
-                Conteúdo da anotação será exibido aqui.
+                Conteúdo da anotação será exibido aqui. O container agora está significativamente maior no sentido horizontal, permitindo melhor visualização do conteúdo.
+
+                Exemplo de conteúdo longo:
+                Este é um exemplo de texto que se estende horizontalmente para demonstrar como o container ampliado acomoda melhor o conteúdo: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                
+                Com o aumento de espaço:
+                - Melhor visualização de tabelas
+                - Facilidade para trabalhar com código
+                - Texto mais confortável para leitura
+                - Melhor organização do conteúdo
               </div>
               <div class="note-actions">
                 <button class="btn-edit" onclick="openEditNoteForm(currentNoteId)">
@@ -807,10 +888,6 @@
     <button class="debug-toggle" onclick="toggleDebug()">
       <i class="fas fa-code"></i> Mostrar/Ocultar Depuração
     </button>
-    
-    <footer>
-      <p>Sistema de Anotações para Google Sites &copy; 2023</p>
-    </footer>
   </div>
 
   <!-- Sistema de Notificação -->
@@ -839,6 +916,7 @@
     let userEmail = null;
     let deleteCallback = null;
     let googleSitesPageId = '';
+    let isContainerExpanded = false;
     
     // --- INICIALIZAÇÃO ---
     document.addEventListener("DOMContentLoaded", function() {
@@ -875,6 +953,28 @@
       // Mostra o link atual para depuração
       logDebug(`URL Atual: ${window.location.href}`);
     });
+    
+    // Função para alternar o tamanho do container
+    function toggleContainerSize() {
+      const container = document.getElementById("note-detail-container");
+      const formContainer = document.getElementById("note-form-container");
+      
+      isContainerExpanded = !isContainerExpanded;
+      
+      if (isContainerExpanded) {
+        container.style.flex = "5";
+        formContainer.style.flex = "5";
+        document.querySelector('.resize-handle i').className = 'fas fa-compress';
+        document.querySelector('.resize-handle').title = "Contrair";
+      } else {
+        container.style.flex = "3";
+        formContainer.style.flex = "3";
+        document.querySelector('.resize-handle i').className = 'fas fa-expand';
+        document.querySelector('.resize-handle').title = "Expandir";
+      }
+      
+      showNotification(`Container ${isContainerExpanded ? 'expandido' : 'contraído'}`, 'success');
+    }
     
     // Função para obter parâmetros da URL
     function getParametersFromURL() {
@@ -1150,6 +1250,15 @@
           showNotification('Por favor, insira um e-mail válido.', 'error');
         }
       }
+    }
+    
+    // Função de logout
+    function logout() {
+      localStorage.removeItem('userEmail');
+      userEmail = null;
+      document.getElementById('login-container').style.display = 'flex';
+      document.getElementById('app-content').style.display = 'none';
+      showNotification('Você saiu da conta.', 'success');
     }
 
     // --- FUNÇÕES DE COMUNICAÇÃO COM O BACKEND ---
