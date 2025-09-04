@@ -273,7 +273,7 @@
       line-height: 1.7;
       padding: 15px;
       font-size: 1.05rem;
-      color: #000000; /* Alterado para preto */
+      color: #000000;
       max-height: calc(100% - 150px);
       border: 1px solid #333;
       border-radius: 8px;
@@ -284,7 +284,7 @@
       overflow-y: auto;
       word-break: break-word;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      background: #ffffff; /* Alterado para branco */
+      background: #ffffff;
       display: block;
       position: relative;
     }
@@ -742,6 +742,25 @@
       color: #F7EF8A;
     }
     
+    /* Novos estilos para autenticação */
+    .login-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(210, 172, 71, 0.3);
+      border-radius: 50%;
+      border-top-color: #D2AC47;
+      animation: spin 1s ease-in-out infinite;
+      margin: 10px auto;
+    }
+    
+    #login-error {
+      color: #D2AC47;
+      margin-top: 15px;
+      text-align: center;
+      display: none;
+    }
+    
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -822,7 +841,7 @@
   <div class="container">
     <header>
       <h1><i class="fas fa-book"></i> Sistema de Anotações</h1>
-      <p>Acesse com seu e-mail para ver suas anotações</p>
+      <p>Acesse com seu e-mail e senha para ver suas anotações</p>
     </header>
     
     <div class="app-container">
@@ -830,11 +849,14 @@
         <div id="login-container" style="display: flex;">
           <form id="login-form">
             <h2><i class="fas fa-lock"></i> Acesso</h2>
-            <p>Insira seu e-mail para acessar suas anotações:</p>
+            <p>Insira seu e-mail e senha para acessar suas anotações:</p>
             <input type="email" id="user-email" placeholder="Seu e-mail" required>
-            <button type="button" onclick="login()">
+            <input type="password" id="user-password" placeholder="Sua senha" required>
+            <button type="submit">
               <i class="fas fa-sign-in-alt"></i> Acessar
             </button>
+            <div class="login-spinner" id="login-spinner"></div>
+            <div id="login-error" style="display: none;"></div>
           </form>
         </div>
         
@@ -887,16 +909,7 @@
                 <span>Categoria</span>
               </div>
               <div id="note-detail-content">
-                Conteúdo da anotação será exibido aqui. O container agora está significativamente maior no sentido horizontal, permitindo melhor visualização do conteúdo.
-
-                Exemplo de conteúdo longo:
-                Este é um exemplo de texto que se estende horizontalmente para demonstrar como o container ampliado acomoda melhor o conteúdo: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                
-                Com o aumento de espaço:
-                - Melhor visualização de tabelas
-                - Facilidade para trabalhar com código
-                - Texto mais confortável para leitura
-                - Melhor organização do conteúdo
+                Conteúdo da anotação será exibido aqui.
               </div>
               <div class="note-actions">
                 <button class="btn-edit" onclick="openEditNoteForm(currentNoteId)">
@@ -958,8 +971,8 @@
   </div>
 
   <script>
-    // O código JavaScript permanece exatamente o mesmo
     // --- CONFIGURAÇÃO INICIAL ---
+    const AUTH_URL = "https://script.google.com/macros/s/AKfycbxfeIybUQvl-cb_VEBITzKF9Nbw97FgWMGWVF6pW-McV5MwVpJOoytWcVKl5dIApOjGZw/exec";
     let WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeWFpisAExqCY5FscF_tF5c_WUWavp3Y-8MPkgPhL3Mj0RoDikM4432hmnDhc-g79Y/exec";
     
     // --- VARIÁVEIS GLOBAIS ---
@@ -970,6 +983,7 @@
     let deleteCallback = null;
     let googleSitesPageId = '';
     let isContainerExpanded = false;
+    let isAuthenticated = false;
     
     // --- INICIALIZAÇÃO ---
     document.addEventListener("DOMContentLoaded", function() {
@@ -991,8 +1005,11 @@
         });
       }
 
+      // Verifica se há autenticação salva
+      const savedAuth = localStorage.getItem('isAuthenticated');
       const savedEmail = localStorage.getItem('userEmail');
-      if (savedEmail) {
+      if (savedAuth === 'true' && savedEmail) {
+        isAuthenticated = true;
         userEmail = savedEmail;
         document.getElementById('user-email-display').textContent = savedEmail;
         document.getElementById('login-container').style.display = 'none';
@@ -1267,35 +1284,83 @@
       }
     }
 
-    function login() {
+    async function login() {
       const emailInput = document.getElementById('user-email');
-      if (emailInput) {
+      const passwordInput = document.getElementById('user-password');
+      const errorElement = document.getElementById('login-error');
+      const spinner = document.getElementById('login-spinner');
+      
+      if (emailInput && passwordInput) {
         const email = emailInput.value.trim();
-        if (email) {
-          userEmail = email;
-          localStorage.setItem('userEmail', email);
+        const password = passwordInput.value;
+        
+        if (!email || !password) {
+          errorElement.textContent = 'Por favor, preencha todos os campos.';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Mostrar spinner e esconder erro
+        spinner.style.display = 'block';
+        errorElement.style.display = 'none';
+        
+        try {
+          // Usando application/x-www-form-urlencoded como no sistema de flashcards
+          const formData = new URLSearchParams();
+          formData.append('email', email);
+          formData.append('password', password);
           
-          document.getElementById('user-email-display').textContent = email;
-          document.getElementById('login-container').style.display = 'none';
-          document.getElementById('app-content').style.display = 'block';
+          const response = await fetch(AUTH_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData,
+          });
           
-          loadNotes();
-        } else {
-          showNotification('Por favor, insira um e-mail válido.', 'error');
+          const result = await response.json();
+          
+          if (result.success) {
+            isAuthenticated = true;
+            userEmail = email;
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userEmail', email);
+            
+            document.getElementById('user-email-display').textContent = email;
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            
+            showNotification('Login realizado com sucesso!');
+            loadNotes();
+          } else {
+            errorElement.textContent = result.error || 'Erro durante a autenticação.';
+            errorElement.style.display = 'block';
+          }
+        } catch (error) {
+          console.error("Erro no login:", error);
+          errorElement.textContent = 'Erro ao conectar com o servidor. Tente novamente.';
+          errorElement.style.display = 'block';
+        } finally {
+          spinner.style.display = 'none';
         }
       }
     }
     
     function logout() {
+      localStorage.removeItem('isAuthenticated');
       localStorage.removeItem('userEmail');
+      isAuthenticated = false;
       userEmail = null;
       document.getElementById('login-container').style.display = 'flex';
       document.getElementById('app-content').style.display = 'none';
+      // Limpar campos de login
+      document.getElementById('user-email').value = '';
+      document.getElementById('user-password').value = '';
       showNotification('Você saiu da conta.', 'success');
     }
 
     async function loadNotes() {
-      if (!userEmail) return;
+      if (!isAuthenticated) return;
       if (!googleSitesPageId) {
         showNotification('ID da página não identificado. As anotações não serão carregadas.', 'error');
         return;
@@ -1358,7 +1423,7 @@
     }
 
     async function saveNote() {
-      if (!userEmail) {
+      if (!isAuthenticated) {
         showNotification('Usuário não autenticado.', 'error');
         return;
       }
@@ -1425,7 +1490,7 @@
     }
 
     async function deleteNote(noteId) {
-      if (!userEmail) {
+      if (!isAuthenticated) {
         showNotification('Usuário não autenticado.', 'error');
         return;
       }
@@ -1452,7 +1517,7 @@
             params.append("debug", "true");
             
             logDebug(`Enviando para: ${url.toString()}`);
-            logDebug(`Parámetros: ${params.toString()}`);
+            logDebug(`Parâmetros: ${params.toString()}`);
             
             const response = await fetch(url, {
               method: "POST",
