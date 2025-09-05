@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anotações - Container Ampliado</title>
+  <title>Sistema de Anotações - Layout Compacto</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -17,48 +17,53 @@
       background: linear-gradient(135deg, #0D0D09 0%, #000000 100%);
       color: #F4E883;
       min-height: 100vh;
-      padding: 20px;
+      padding: 12px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
     }
     
     .container {
-      max-width: 1400px;
       width: 100%;
+      max-width: 980px;
       background: rgba(20, 20, 20, 0.95);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       border: 1px solid #333;
     }
     
     header {
       text-align: center;
-      padding: 15px 0;
+      padding: 10px 0;
       color: #F7EF8A;
+      margin-bottom: 12px;
     }
     
     header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
       background: linear-gradient(to right, #D2AC47, #F7EF8A, #AE8625);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+    }
+    
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
     }
     
     .app-container {
-      margin-top: 15px;
+      margin-top: 12px;
     }
     
     .notes-app {
       background: linear-gradient(to bottom, #1a1a1a, #111);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-      min-height: 600px;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+      min-height: 480px;
       border: 1px solid #333;
     }
     
@@ -66,65 +71,67 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       padding-bottom: 10px;
-      border-bottom: 2px solid #333;
+      border-bottom: 1px solid #333;
       flex-wrap: wrap;
+      gap: 12px;
     }
     
     .app-header h2 {
       color: #F7EF8A;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
     }
     
     .user-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: rgba(210, 172, 71, 0.25);
-      padding: 8px 15px;
+      padding: 6px 14px;
       border-radius: 50px;
       font-weight: 500;
       color: #F7EF8A;
+      font-size: 0.9rem;
     }
     
     .top-bar {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     
     .top-bar button {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 12px 20px;
+      padding: 8px 16px;
       border-radius: 50px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      font-size: 1.05rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      font-size: 0.9rem;
       transition: all 0.3s ease;
+      white-space: nowrap;
     }
     
     .top-bar button:hover {
       background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
     
     .top-bar input[type="text"] {
       flex: 1;
-      padding: 12px 20px;
-      border: 2px solid #555;
+      padding: 8px 16px;
+      border: 1px solid #555;
       border-radius: 50px;
-      font-size: 1.05rem;
-      min-width: 250px;
+      font-size: 0.9rem;
+      min-width: 140px;
       transition: border-color 0.3s;
       background-color: #222;
       color: #fff;
@@ -136,12 +143,12 @@
     }
     
     .top-bar select {
-      padding: 12px 20px;
-      border: 2px solid #555;
+      padding: 8px 16px;
+      border: 1px solid #555;
       border-radius: 50px;
       background: #222;
-      font-size: 1.05rem;
-      min-width: 180px;
+      font-size: 0.9rem;
+      min-width: 150px;
       transition: border-color 0.3s;
       color: #fff;
     }
@@ -154,42 +161,42 @@
     .note-counter {
       background: rgba(210, 172, 71, 0.25);
       color: #F7EF8A;
-      padding: 10px 20px;
+      padding: 6px 14px;
       border-radius: 50px;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.1rem;
+      gap: 6px;
+      font-size: 0.9rem;
     }
     
     #main-container {
       display: flex;
-      height: 550px;
-      gap: 25px;
+      height: 380px;
+      gap: 16px;
     }
     
     #notes-list-container {
       flex: 1;
-      border: 2px solid #333;
-      border-radius: 12px;
+      border: 1px solid #333;
+      border-radius: 8px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: transform 0.3s;
-      min-width: 300px;
-      max-width: 400px;
+      min-width: 220px;
+      max-width: 320px;
       background: linear-gradient(to bottom, #1a1a1a, #111);
     }
     
     .list-header {
       background: linear-gradient(to right, #222, #111);
       color: #F7EF8A;
-      padding: 18px;
+      padding: 12px 16px;
       font-weight: bold;
       display: flex;
       justify-content: space-between;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
     }
     
     #notes-list {
@@ -200,47 +207,48 @@
     }
     
     .note-item {
-      padding: 18px;
+      padding: 12px 16px;
       border-bottom: 1px solid #333;
       cursor: pointer;
       transition: all 0.2s ease;
       color: #eee;
+      font-size: 0.9rem;
     }
     
     .note-item:hover {
       background: linear-gradient(to right, #2a2a2a, #222);
-      transform: translateX(5px);
-      box-shadow: inset 5px 0 10px rgba(244, 232, 131, 0.15);
+      transform: translateX(3px);
+      box-shadow: inset 3px 0 8px rgba(244, 232, 131, 0.15);
     }
     
     .note-item.active {
       background: rgba(210, 172, 71, 0.15);
-      border-left: 6px solid #D2AC47;
-      box-shadow: inset 5px 0 15px rgba(210, 172, 71, 0.25);
+      border-left: 4px solid #D2AC47;
+      box-shadow: inset 3px 0 10px rgba(210, 172, 71, 0.25);
     }
     
     .note-title {
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       color: #F7EF8A;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
     }
     
     .note-category {
       background: rgba(210, 172, 71, 0.25);
       display: inline-block;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-size: 0.75rem;
       color: #F7EF8A;
       font-weight: 500;
     }
     
     #note-detail-container {
-      flex: 3;
-      border: 2px solid #333;
-      border-radius: 12px;
-      padding: 25px;
+      flex: 2;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       background: linear-gradient(to bottom, #1a1a1a, #111);
@@ -249,44 +257,41 @@
     }
     
     #note-detail-title {
-      font-size: 1.9rem;
+      font-size: 1.5rem;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       color: #F7EF8A;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #333;
     }
     
     #note-detail-category {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #D2AC47;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-weight: 500;
     }
     
     #note-detail-content {
       flex: 1;
       white-space: pre-wrap;
-      line-height: 1.7;
-      padding: 15px;
-      font-size: 1.05rem;
+      line-height: 1.5;
+      padding: 12px;
+      font-size: 0.95rem;
       color: #000000;
-      max-height: calc(100% - 150px);
+      max-height: calc(100% - 120px);
       border: 1px solid #333;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      border-radius: 6px;
+      margin-bottom: 12px;
       width: 100%;
-      max-width: 100%;
       overflow-x: auto;
       overflow-y: auto;
       word-break: break-word;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       background: #ffffff;
-      display: block;
-      position: relative;
     }
     
     .resize-handle {
@@ -296,14 +301,15 @@
       background: #D2AC47;
       color: #0D0D09;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 10;
       transition: all 0.3s;
+      font-size: 0.8rem;
     }
     
     .resize-handle:hover {
@@ -313,27 +319,27 @@
     
     .note-actions {
       display: flex;
-      gap: 15px;
-      padding-top: 20px;
-      border-top: 2px solid #333;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid #333;
       margin-top: auto;
     }
     
     .note-actions button {
-      padding: 12px 25px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.05rem;
+      gap: 6px;
+      font-size: 0.9rem;
       transition: all 0.3s ease;
     }
     
     .note-actions button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       opacity: 0.9;
     }
     
@@ -342,30 +348,20 @@
       color: #0D0D09;
     }
     
-    .btn-edit:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-    }
-    
     .btn-delete {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
-    }
-    
-    .btn-delete:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
     }
     
     #note-form-container {
       display: none;
       flex-direction: column;
       height: 100%;
-      flex: 3;
+      flex: 2;
       background: linear-gradient(to bottom, #1a1a1a, #111);
-      border-radius: 12px;
-      padding: 25px;
-      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid #333;
     }
     
     #note-form {
@@ -375,11 +371,11 @@
     }
     
     #note-form input, #note-form textarea {
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 2px solid #555;
-      border-radius: 10px;
-      font-size: 1.05rem;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #555;
+      border-radius: 6px;
+      font-size: 0.9rem;
       transition: border-color 0.3s;
       background: #222;
       color: #fff;
@@ -393,29 +389,29 @@
     #note-form textarea {
       flex: 1;
       resize: vertical;
-      min-height: 300px;
+      min-height: 200px;
       max-width: 100%;
       overflow-wrap: break-word;
     }
     
     .form-actions {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       margin-top: 10px;
     }
     
     .form-actions button {
-      padding: 14px 30px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       transition: all 0.3s ease;
     }
     
     .form-actions button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       opacity: 0.9;
     }
     
@@ -424,19 +420,9 @@
       color: #0D0D09;
     }
     
-    .btn-save:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-    }
-    
     .btn-cancel {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
-    }
-    
-    .btn-cancel:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
     }
     
     #login-container {
@@ -444,33 +430,39 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px;
+      padding: 30px;
       text-align: center;
       height: 100%;
     }
     
     #login-form {
       background: #111;
-      padding: 40px;
-      border-radius: 15px;
-      max-width: 500px;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 400px;
       width: 100%;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
       border: 1px solid #333;
     }
     
     #login-form h2 {
       color: #D2AC47;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+    
+    #login-form p {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
     }
     
     #login-form input {
       width: 100%;
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 2px solid #555;
-      border-radius: 8px;
-      font-size: 1.05rem;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #555;
+      border-radius: 6px;
+      font-size: 0.9rem;
       transition: border-color 0.3s;
       background: #222;
       color: #fff;
@@ -485,9 +477,9 @@
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 15px 30px;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 0.95rem;
       cursor: pointer;
       font-weight: bold;
       width: 100%;
@@ -496,8 +488,7 @@
     
     #login-form button:hover {
       background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
     
     #loading-message, #error-message {
@@ -505,18 +496,18 @@
       justify-content: center;
       align-items: center;
       height: 100%;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       flex-direction: column;
-      gap: 25px;
+      gap: 15px;
       text-align: center;
       background: rgba(20, 20, 20, 0.9);
-      border-radius: 12px;
-      padding: 30px;
+      border-radius: 8px;
+      padding: 20px;
       color: #F7EF8A;
     }
     
     #loading-message i {
-      font-size: 3.5rem;
+      font-size: 2.5rem;
       color: #D2AC47;
       animation: spin 1.5s linear infinite;
     }
@@ -527,30 +518,31 @@
     
     .notification-container {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       z-index: 1000;
-      max-width: 350px;
+      max-width: 300px;
       width: 100%;
     }
     
     .notification {
       background: #111;
-      border-radius: 8px;
-      padding: 15px 20px;
-      margin-bottom: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.7s forwards;
-      border-left: 5px solid #D2AC47;
+      border-left: 3px solid #D2AC47;
       transition: transform 0.3s;
       color: #F7EF8A;
+      font-size: 0.9rem;
     }
     
     .notification:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
     
     .notification.error {
@@ -558,7 +550,7 @@
     }
     
     .notification-icon {
-      font-size: 1.8rem;
+      font-size: 1.3rem;
     }
     
     .success .notification-icon {
@@ -575,14 +567,15 @@
     
     .notification-title {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
+      font-size: 0.95rem;
     }
     
     .notification-close {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #777;
       transition: color 0.3s;
     }
@@ -607,47 +600,47 @@
     
     .modal {
       background: #111;
-      border-radius: 12px;
-      padding: 30px;
-      max-width: 500px;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 400px;
       width: 90%;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-      transform: translateY(-20px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transform: translateY(-15px);
       animation: modalAppear 0.4s ease forwards;
       border: 1px solid #333;
       color: #F7EF8A;
     }
     
     .modal h3 {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       color: #D2AC47;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
     }
     
     .modal p {
-      margin-bottom: 25px;
-      font-size: 1.1rem;
-      line-height: 1.6;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
     
     .modal-buttons {
       display: flex;
       justify-content: flex-end;
-      gap: 15px;
+      gap: 10px;
     }
     
     .modal-buttons button {
-      padding: 12px 25px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 0.9rem;
       transition: all 0.3s ease;
     }
     
     .modal-buttons button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       opacity: 0.9;
     }
     
@@ -656,32 +649,22 @@
       color: #0D0D09;
     }
     
-    .btn-modal-confirm:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-    }
-    
     .btn-modal-cancel {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
     }
     
-    .btn-modal-cancel:hover {
-      background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
-    }
-    
     .page-identifier {
       background: rgba(210, 172, 71, 0.25);
-      border-radius: 8px;
-      padding: 12px 20px;
-      margin-top: 15px;
+      border-radius: 6px;
+      padding: 8px 16px;
+      margin-top: 12px;
       color: #F7EF8A;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-size: 1.1rem;
+      gap: 8px;
+      font-size: 0.9rem;
       backdrop-filter: blur(5px);
       border: 1px solid rgba(210, 172, 71, 0.3);
       width: 100%;
@@ -689,43 +672,45 @@
     
     .page-identifier i {
       color: #F7EF8A;
+      font-size: 0.9rem;
     }
     
     .debug-info {
       background: rgba(0, 0, 0, 0.7);
       color: #F7EF8A;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-      font-size: 0.9rem;
-      max-height: 200px;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      max-height: 150px;
       overflow-y: auto;
       border: 1px solid #333;
     }
     
     .debug-info h4 {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: #D2AC47;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      font-size: 0.95rem;
     }
     
     .debug-toggle {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
+      padding: 6px 12px;
+      border-radius: 4px;
       cursor: pointer;
       margin-top: 10px;
       font-weight: bold;
       transition: all 0.3s ease;
+      font-size: 0.85rem;
     }
     
     .debug-toggle:hover {
       background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
-      color: #fff;
     }
     
     .logout-button {
@@ -733,8 +718,8 @@
       border: none;
       cursor: pointer;
       color: #D2AC47;
-      font-size: 1.2rem;
-      margin-left: 10px;
+      font-size: 1rem;
+      margin-left: 8px;
       transition: color 0.3s;
     }
     
@@ -742,12 +727,11 @@
       color: #F7EF8A;
     }
     
-    /* Novos estilos para autenticação */
     .login-spinner {
       display: none;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(210, 172, 71, 0.3);
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(210, 172, 71, 0.3);
       border-radius: 50%;
       border-top-color: #D2AC47;
       animation: spin 1s ease-in-out infinite;
@@ -756,9 +740,10 @@
     
     #login-error {
       color: #D2AC47;
-      margin-top: 15px;
+      margin-top: 12px;
       text-align: center;
       display: none;
+      font-size: 0.9rem;
     }
     
     @keyframes spin {
@@ -777,19 +762,19 @@
     }
     
     @keyframes modalAppear {
-      from { opacity: 0; transform: translateY(-20px); }
+      from { opacity: 0; transform: translateY(-15px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
       #main-container {
         flex-direction: column;
         height: auto;
-        min-height: 850px;
+        min-height: 600px;
       }
       
       header h1 {
-        font-size: 2rem;
+        font-size: 1.6rem;
       }
       
       .top-bar {
@@ -803,36 +788,60 @@
       
       .app-header {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
+        align-items: flex-start;
       }
       
       .notes-app {
-        padding: 20px;
+        padding: 12px;
       }
       
       #notes-list-container {
         min-width: unset;
         max-width: unset;
+        height: 200px;
       }
       
       #note-detail-content {
         max-width: 100%;
         overflow-x: auto;
+        min-height: 200px;
+      }
+      
+      .user-info {
+        font-size: 0.85rem;
       }
     }
     
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       body {
-        padding: 10px;
+        padding: 8px;
       }
       
       .container {
-        padding: 15px;
+        padding: 12px;
+        border-radius: 8px;
       }
       
       .page-identifier {
-        font-size: 0.9rem;
-        padding: 8px 15px;
+        font-size: 0.85rem;
+        padding: 6px 12px;
+      }
+      
+      .note-actions {
+        flex-direction: column;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      #login-container {
+        padding: 20px;
+      }
+      
+      #login-form {
+        padding: 20px;
       }
     }
   </style>
@@ -1027,13 +1036,13 @@
       isContainerExpanded = !isContainerExpanded;
       
       if (isContainerExpanded) {
-        container.style.flex = "5";
-        formContainer.style.flex = "5";
+        container.style.flex = "3";
+        formContainer.style.flex = "3";
         document.querySelector('.resize-handle i').className = 'fas fa-compress';
         document.querySelector('.resize-handle').title = "Contrair";
       } else {
-        container.style.flex = "3";
-        formContainer.style.flex = "3";
+        container.style.flex = "2";
+        formContainer.style.flex = "2";
         document.querySelector('.resize-handle i').className = 'fas fa-expand';
         document.querySelector('.resize-handle').title = "Expandir";
       }
