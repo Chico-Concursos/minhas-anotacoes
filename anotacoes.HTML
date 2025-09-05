@@ -17,7 +17,7 @@
       background: linear-gradient(135deg, #0D0D09 0%, #000000 100%);
       color: #F4E883;
       min-height: 100vh;
-      padding: 12px;
+      padding: 10px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -25,24 +25,24 @@
     
     .container {
       width: 100%;
-      max-width: 980px;
+      max-width: 1100px;
       background: rgba(20, 20, 20, 0.95);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       border: 1px solid #333;
     }
     
     header {
       text-align: center;
-      padding: 10px 0;
+      padding: 8px 0;
       color: #F7EF8A;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     
     header h1 {
-      font-size: 1.8rem;
-      margin-bottom: 6px;
+      font-size: 1.6rem;
+      margin-bottom: 5px;
       text-shadow: 0 1px 2px rgba(0,0,0,0.3);
       background: linear-gradient(to right, #D2AC47, #F7EF8A, #AE8625);
       -webkit-background-clip: text;
@@ -50,20 +50,20 @@
     }
     
     header p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       opacity: 0.9;
     }
     
     .app-container {
-      margin-top: 12px;
+      margin-top: 10px;
     }
     
     .notes-app {
       background: linear-gradient(to bottom, #1a1a1a, #111);
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-      min-height: 480px;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      min-height: 420px;
       border: 1px solid #333;
     }
     
@@ -71,50 +71,51 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1px solid #333;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 8px;
     }
     
     .app-header h2 {
       color: #F7EF8A;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
     }
     
     .user-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(210, 172, 71, 0.25);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 50px;
       font-weight: 500;
       color: #F7EF8A;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .top-bar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
     }
     
     .top-bar button {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 8px 16px;
+      padding: 7px 12px;
       border-radius: 50px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-      font-size: 0.9rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      font-size: 0.85rem;
       transition: all 0.3s ease;
       white-space: nowrap;
     }
@@ -122,19 +123,18 @@
     .top-bar button:hover {
       background: linear-gradient(135deg, #F4E883, #D2AC47, #AE8625);
       transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
     }
     
     .top-bar input[type="text"] {
-      flex: 1;
-      padding: 8px 16px;
+      padding: 7px 12px;
       border: 1px solid #555;
       border-radius: 50px;
-      font-size: 0.9rem;
-      min-width: 140px;
+      font-size: 0.85rem;
       transition: border-color 0.3s;
       background-color: #222;
       color: #fff;
+      width: 100%;
     }
     
     .top-bar input[type="text"]:focus {
@@ -143,14 +143,14 @@
     }
     
     .top-bar select {
-      padding: 8px 16px;
+      padding: 7px 12px;
       border: 1px solid #555;
       border-radius: 50px;
       background: #222;
-      font-size: 0.9rem;
-      min-width: 150px;
+      font-size: 0.85rem;
       transition: border-color 0.3s;
       color: #fff;
+      min-width: 120px;
     }
     
     .top-bar select:focus {
@@ -161,42 +161,47 @@
     .note-counter {
       background: rgba(210, 172, 71, 0.25);
       color: #F7EF8A;
-      padding: 6px 14px;
+      padding: 5px 10px;
       border-radius: 50px;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
+      gap: 5px;
+      font-size: 0.85rem;
     }
     
     #main-container {
       display: flex;
-      height: 380px;
-      gap: 16px;
+      flex-direction: column;
+      height: 320px;
+      gap: 12px;
+    }
+    
+    .content-area {
+      display: flex;
+      gap: 12px;
+      height: 100%;
     }
     
     #notes-list-container {
       flex: 1;
       border: 1px solid #333;
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s;
-      min-width: 220px;
-      max-width: 320px;
+      min-width: 200px;
       background: linear-gradient(to bottom, #1a1a1a, #111);
     }
     
     .list-header {
       background: linear-gradient(to right, #222, #111);
       color: #F7EF8A;
-      padding: 12px 16px;
+      padding: 10px 12px;
       font-weight: bold;
       display: flex;
       justify-content: space-between;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     #notes-list {
@@ -207,39 +212,39 @@
     }
     
     .note-item {
-      padding: 12px 16px;
+      padding: 10px 12px;
       border-bottom: 1px solid #333;
       cursor: pointer;
       transition: all 0.2s ease;
       color: #eee;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .note-item:hover {
       background: linear-gradient(to right, #2a2a2a, #222);
       transform: translateX(3px);
-      box-shadow: inset 3px 0 8px rgba(244, 232, 131, 0.15);
+      box-shadow: inset 3px 0 6px rgba(244, 232, 131, 0.15);
     }
     
     .note-item.active {
       background: rgba(210, 172, 71, 0.15);
-      border-left: 4px solid #D2AC47;
-      box-shadow: inset 3px 0 10px rgba(210, 172, 71, 0.25);
+      border-left: 3px solid #D2AC47;
+      box-shadow: inset 3px 0 8px rgba(210, 172, 71, 0.25);
     }
     
     .note-title {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       color: #F7EF8A;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     .note-category {
       background: rgba(210, 172, 71, 0.25);
       display: inline-block;
-      padding: 3px 10px;
-      border-radius: 15px;
-      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
       color: #F7EF8A;
       font-weight: 500;
     }
@@ -247,31 +252,30 @@
     #note-detail-container {
       flex: 2;
       border: 1px solid #333;
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 6px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       background: linear-gradient(to bottom, #1a1a1a, #111);
-      transition: transform 0.3s;
       position: relative;
     }
     
     #note-detail-title {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: #F7EF8A;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
       border-bottom: 1px solid #333;
     }
     
     #note-detail-category {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #D2AC47;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: 500;
     }
     
@@ -279,18 +283,16 @@
       flex: 1;
       white-space: pre-wrap;
       line-height: 1.5;
-      padding: 12px;
-      font-size: 0.95rem;
+      padding: 10px;
+      font-size: 0.9rem;
       color: #000000;
-      max-height: calc(100% - 120px);
       border: 1px solid #333;
-      border-radius: 6px;
-      margin-bottom: 12px;
+      border-radius: 5px;
+      margin-bottom: 10px;
       width: 100%;
-      overflow-x: auto;
       overflow-y: auto;
       word-break: break-word;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
       background: #ffffff;
     }
     
@@ -301,15 +303,15 @@
       background: #D2AC47;
       color: #0D0D09;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 10;
       transition: all 0.3s;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     
     .resize-handle:hover {
@@ -319,22 +321,22 @@
     
     .note-actions {
       display: flex;
-      gap: 10px;
-      padding-top: 16px;
+      gap: 8px;
+      padding-top: 12px;
       border-top: 1px solid #333;
       margin-top: auto;
     }
     
     .note-actions button {
-      padding: 8px 16px;
+      padding: 7px 12px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
+      gap: 5px;
+      font-size: 0.85rem;
       transition: all 0.3s ease;
     }
     
@@ -359,8 +361,8 @@
       height: 100%;
       flex: 2;
       background: linear-gradient(to bottom, #1a1a1a, #111);
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 6px;
+      padding: 12px;
       border: 1px solid #333;
     }
     
@@ -371,11 +373,11 @@
     }
     
     #note-form input, #note-form textarea {
-      padding: 10px;
-      margin-bottom: 16px;
+      padding: 8px;
+      margin-bottom: 12px;
       border: 1px solid #555;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border-radius: 5px;
+      font-size: 0.85rem;
       transition: border-color 0.3s;
       background: #222;
       color: #fff;
@@ -389,24 +391,24 @@
     #note-form textarea {
       flex: 1;
       resize: vertical;
-      min-height: 200px;
+      min-height: 180px;
       max-width: 100%;
       overflow-wrap: break-word;
     }
     
     .form-actions {
       display: flex;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 8px;
+      margin-top: 8px;
     }
     
     .form-actions button {
-      padding: 10px 20px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.3s ease;
     }
     
@@ -430,39 +432,39 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px;
+      padding: 25px;
       text-align: center;
       height: 100%;
     }
     
     #login-form {
       background: #111;
-      padding: 25px;
-      border-radius: 10px;
-      max-width: 400px;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 380px;
       width: 100%;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       border: 1px solid #333;
     }
     
     #login-form h2 {
       color: #D2AC47;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
     }
     
     #login-form p {
-      margin-bottom: 15px;
-      font-size: 0.9rem;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
     }
     
     #login-form input {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
+      padding: 8px;
+      margin-bottom: 12px;
       border: 1px solid #555;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border-radius: 5px;
+      font-size: 0.85rem;
       transition: border-color 0.3s;
       background: #222;
       color: #fff;
@@ -477,9 +479,9 @@
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 0.95rem;
+      padding: 10px 16px;
+      border-radius: 5px;
+      font-size: 0.9rem;
       cursor: pointer;
       font-weight: bold;
       width: 100%;
@@ -496,18 +498,18 @@
       justify-content: center;
       align-items: center;
       height: 100%;
-      font-size: 1.1rem;
+      font-size: 1rem;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
       text-align: center;
       background: rgba(20, 20, 20, 0.9);
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 6px;
+      padding: 15px;
       color: #F7EF8A;
     }
     
     #loading-message i {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #D2AC47;
       animation: spin 1.5s linear infinite;
     }
@@ -521,24 +523,24 @@
       top: 10px;
       right: 10px;
       z-index: 1000;
-      max-width: 300px;
+      max-width: 280px;
       width: 100%;
     }
     
     .notification {
       background: #111;
-      border-radius: 6px;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.7s forwards;
       border-left: 3px solid #D2AC47;
       transition: transform 0.3s;
       color: #F7EF8A;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .notification:hover {
@@ -550,7 +552,7 @@
     }
     
     .notification-icon {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
     
     .success .notification-icon {
@@ -568,14 +570,14 @@
     .notification-title {
       font-weight: bold;
       margin-bottom: 3px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     .notification-close {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #777;
       transition: color 0.3s;
     }
@@ -600,42 +602,42 @@
     
     .modal {
       background: #111;
-      border-radius: 8px;
-      padding: 20px;
-      max-width: 400px;
+      border-radius: 6px;
+      padding: 15px;
+      max-width: 380px;
       width: 90%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      transform: translateY(-15px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transform: translateY(-12px);
       animation: modalAppear 0.4s ease forwards;
       border: 1px solid #333;
       color: #F7EF8A;
     }
     
     .modal h3 {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: #D2AC47;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
     
     .modal p {
-      margin-bottom: 20px;
-      font-size: 0.95rem;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
       line-height: 1.5;
     }
     
     .modal-buttons {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
     }
     
     .modal-buttons button {
-      padding: 8px 16px;
+      padding: 7px 14px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.3s ease;
     }
     
@@ -656,15 +658,15 @@
     
     .page-identifier {
       background: rgba(210, 172, 71, 0.25);
-      border-radius: 6px;
-      padding: 8px 16px;
-      margin-top: 12px;
+      border-radius: 5px;
+      padding: 7px 14px;
+      margin-top: 10px;
       color: #F7EF8A;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      font-size: 0.9rem;
+      gap: 7px;
+      font-size: 0.85rem;
       backdrop-filter: blur(5px);
       border: 1px solid rgba(210, 172, 71, 0.3);
       width: 100%;
@@ -672,41 +674,41 @@
     
     .page-identifier i {
       color: #F7EF8A;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .debug-info {
       background: rgba(0, 0, 0, 0.7);
       color: #F7EF8A;
-      padding: 12px;
-      border-radius: 6px;
-      margin-top: 15px;
-      font-size: 0.85rem;
-      max-height: 150px;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      max-height: 120px;
       overflow-y: auto;
       border: 1px solid #333;
     }
     
     .debug-info h4 {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #D2AC47;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
+      gap: 5px;
+      font-size: 0.9rem;
     }
     
     .debug-toggle {
       background: linear-gradient(135deg, #D2AC47, #F7EF8A, #AE8625);
       color: #0D0D09;
       border: none;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 8px;
       font-weight: bold;
       transition: all 0.3s ease;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     
     .debug-toggle:hover {
@@ -718,8 +720,8 @@
       border: none;
       cursor: pointer;
       color: #D2AC47;
-      font-size: 1rem;
-      margin-left: 8px;
+      font-size: 0.9rem;
+      margin-left: 6px;
       transition: color 0.3s;
     }
     
@@ -729,21 +731,21 @@
     
     .login-spinner {
       display: none;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border: 2px solid rgba(210, 172, 71, 0.3);
       border-radius: 50%;
       border-top-color: #D2AC47;
       animation: spin 1s ease-in-out infinite;
-      margin: 10px auto;
+      margin: 8px auto;
     }
     
     #login-error {
       color: #D2AC47;
-      margin-top: 12px;
+      margin-top: 10px;
       text-align: center;
       display: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     @keyframes spin {
@@ -762,7 +764,7 @@
     }
     
     @keyframes modalAppear {
-      from { opacity: 0; transform: translateY(-15px); }
+      from { opacity: 0; transform: translateY(-12px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
@@ -770,15 +772,16 @@
       #main-container {
         flex-direction: column;
         height: auto;
-        min-height: 600px;
+        min-height: 500px;
       }
       
       header h1 {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
       }
       
       .top-bar {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+        gap: 8px;
       }
       
       .top-bar input[type="text"], 
@@ -788,28 +791,28 @@
       
       .app-header {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         align-items: flex-start;
       }
       
       .notes-app {
-        padding: 12px;
+        padding: 10px;
       }
       
       #notes-list-container {
         min-width: unset;
         max-width: unset;
-        height: 200px;
+        height: 180px;
       }
       
       #note-detail-content {
         max-width: 100%;
         overflow-x: auto;
-        min-height: 200px;
+        min-height: 180px;
       }
       
       .user-info {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
     }
     
@@ -819,13 +822,13 @@
       }
       
       .container {
-        padding: 12px;
+        padding: 10px;
         border-radius: 8px;
       }
       
       .page-identifier {
-        font-size: 0.85rem;
-        padding: 6px 12px;
+        font-size: 0.8rem;
+        padding: 6px 10px;
       }
       
       .note-actions {
@@ -837,11 +840,11 @@
       }
       
       #login-container {
-        padding: 20px;
+        padding: 15px;
       }
       
       #login-form {
-        padding: 20px;
+        padding: 15px;
       }
     }
   </style>
@@ -899,52 +902,54 @@
             
             <div id="error-message" style="display:none;"></div>
             
-            <div id="notes-list-container" style="display:none;">
-              <div class="list-header">
-                <span>Suas Anotações</span>
-                <span id="filtered-counter">0/0</span>
-              </div>
-              <ul id="notes-list"></ul>
-            </div>
-            
-            <div id="note-detail-container" style="display:none;">
-              <div class="resize-handle" title="Expandir/Contrair" onclick="toggleContainerSize()">
-                <i class="fas fa-expand"></i>
+            <div class="content-area">
+              <div id="notes-list-container" style="display:none;">
+                <div class="list-header">
+                  <span>Suas Anotações</span>
+                  <span id="filtered-counter">0/0</span>
+                </div>
+                <ul id="notes-list"></ul>
               </div>
               
-              <div id="note-detail-title">Título da Anotação</div>
-              <div id="note-detail-category">
-                <i class="fas fa-tag"></i>
-                <span>Categoria</span>
-              </div>
-              <div id="note-detail-content">
-                Conteúdo da anotação será exibido aqui.
-              </div>
-              <div class="note-actions">
-                <button class="btn-edit" onclick="openEditNoteForm(currentNoteId)">
-                  <i class="fas fa-edit"></i> Editar
-                </button>
-                <button class="btn-delete" onclick="deleteNote(currentNoteId)">
-                  <i class="fas fa-trash"></i> Excluir
-                </button>
-              </div>
-            </div>
-            
-            <div id="note-form-container">
-              <form id="note-form">
-                <input type="hidden" id="form-note-id" value="">
-                <input type="text" id="form-note-title" placeholder="Título" required>
-                <input type="text" id="form-note-category" placeholder="Categoria">
-                <textarea id="form-note-content" placeholder="Conteúdo"></textarea>
-                <div class="form-actions">
-                  <button class="btn-save" type="submit">
-                    <i class="fas fa-save"></i> Salvar
+              <div id="note-detail-container" style="display:none;">
+                <div class="resize-handle" title="Expandir/Contrair" onclick="toggleContainerSize()">
+                  <i class="fas fa-expand"></i>
+                </div>
+                
+                <div id="note-detail-title">Título da Anotação</div>
+                <div id="note-detail-category">
+                  <i class="fas fa-tag"></i>
+                  <span>Categoria</span>
+                </div>
+                <div id="note-detail-content">
+                  Conteúdo da anotação será exibido aqui.
+                </div>
+                <div class="note-actions">
+                  <button class="btn-edit" onclick="openEditNoteForm(currentNoteId)">
+                    <i class="fas fa-edit"></i> Editar
                   </button>
-                  <button class="btn-cancel" type="button" onclick="cancelForm()">
-                    <i class="fas fa-times"></i> Cancelar
+                  <button class="btn-delete" onclick="deleteNote(currentNoteId)">
+                    <i class="fas fa-trash"></i> Excluir
                   </button>
                 </div>
-              </form>
+              </div>
+              
+              <div id="note-form-container">
+                <form id="note-form">
+                  <input type="hidden" id="form-note-id" value="">
+                  <input type="text" id="form-note-title" placeholder="Título" required>
+                  <input type="text" id="form-note-category" placeholder="Categoria">
+                  <textarea id="form-note-content" placeholder="Conteúdo"></textarea>
+                  <div class="form-actions">
+                    <button class="btn-save" type="submit">
+                      <i class="fas fa-save"></i> Salvar
+                    </button>
+                    <button class="btn-cancel" type="button" onclick="cancelForm()">
+                      <i class="fas fa-times"></i> Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -1448,7 +1453,7 @@
       const noteId = document.getElementById("form-note-id").value;
 
       if (!title) {
-        showNotification('O título é obrigatório.', 'error');
+        showNotification('O título é obligatório.', 'error');
         document.getElementById("form-note-title").focus();
         return;
       }
