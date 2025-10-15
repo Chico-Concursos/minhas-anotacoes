@@ -244,7 +244,7 @@
       padding: 2px 8px;
       border-radius: 12px;
       font-size: 0.8rem;
-      color: #F7EF8A;
+      color:white;
       font-weight: 500;
     }
     
@@ -270,7 +270,7 @@
     
     #note-detail-category {
       font-size: 0.85rem;
-      color: #D2AC47;
+      color: white;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -908,11 +908,10 @@
                 <ul id="notes-list"></ul>
               </div>
               
-              <div id="note-detail-container" style="display:none;">
+                            <div id="note-detail-container" style="display:none;">
                 <div class="resize-handle" title="Expandir/Contrair" onclick="toggleContainerSize()">
                   <i class="fas fa-expand"></i>
                 </div>
-                
                 <div id="note-detail-title">Título da Anotação</div>
                 <div id="note-detail-category">
                   <i class="fas fa-tag"></i>
@@ -929,12 +928,13 @@
                     <i class="fas fa-trash"></i> Excluir
                   </button>
                 </div>
-				    <div class="page-identifier">
+                <div class="page-identifier">
                   <i class="fas fa-link"></i>
                   <span id="page-identifier-display">Vinculado à página: Carregando...</span>
+                </div>
               </div>
-              
-              <div id="note-form-container">
+
+              <div id="note-form-container" style="display:none;">
                 <form id="note-form">
                   <input type="hidden" id="form-note-id" value="">
                   <input type="text" id="form-note-title" placeholder="Título" required>
